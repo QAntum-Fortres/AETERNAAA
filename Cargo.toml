@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "lwas_core",
+    "lwas_parser",
+    "lwas_cli",
+    "helios-ui/src-tauri", "lwas_economy",
+]
+resolver = "2"

@@ -1,0 +1,7 @@
+# QANTUM PROTECTIVE BARRIER
+node_modules/
+target/
+dist/
+*.log
+soul_memory.bin
+.env
