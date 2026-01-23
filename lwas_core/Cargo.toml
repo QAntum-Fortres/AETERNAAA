@@ -1,0 +1,48 @@
+[package]
+name = "lwas_core"
+version = "1.0.0-SINGULARITY"
+edition = "2024"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+rayon = "1.10"
+subtle = "2.6"
+hashbrown = { version = "0.15", features = ["rayon"] }
+dashmap = { version = "6.1", features = ["rayon"] }
+tokio = { version = "1.40", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0.17"
+rand = "0.8.5"
+sysinfo = "0.30"
+reqwest = { version = "0.12", features = ["json"] }
+uuid = { version = "1.10.0", features = ["v4", "serde"] }
+bincode = "1.3.3"
+walkdir = "2.5"
+async-trait = "0.1"
+memmap2 = "0.9.5"
+anyhow = "1.0"
+ts-rs = { version = "10.0", features = ["serde-compat"] }
+inventory = "0.3"
+regex = "1.10"
+ignore = "0.4"
+chrono = "0.4"
+md5 = "0.7"
+crossbeam-queue = "0.3"
+dotenvy = "0.15"
+
+# --- EMBEDDED BRAIN STACK ---
+candle-core = "0.8.0"
+candle-nn = "0.8.0"
+candle-transformers = "0.8.0"
+tokenizers = "0.21.0"
+axum = "0.7"
+tower-http = { version = "0.6", features = ["cors"] }
+sha2 = "0.10.9"
+hmac = "0.12.1"
+hex = "0.4.3"
+
+[build-dependencies]
+walkdir = "2.5"

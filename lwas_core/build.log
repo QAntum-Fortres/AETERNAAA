@@ -1,0 +1,22 @@
+cargo :    Compiling lwas_core v0.1.0 (C:\Users\papic\Dow
+nloads\RUST-AEGIS\QANTUM-JULES\lwas_core)
+At line:1 char:1
++ cargo build --release --color never 2>&1 | Out-File 
+build.log -Encodi ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (   Compilin 
+   g lw...ULES\lwas_core):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: unused import: `rayon::prelude`
+ --> lwas_core\src\memory\vsh.rs:2:5
+  |
+2 | use rayon::prelude::*;
+  |     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of 
+`#[warn(unused)]`) on by default
+
+warning: `lwas_core` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 
+3.12s

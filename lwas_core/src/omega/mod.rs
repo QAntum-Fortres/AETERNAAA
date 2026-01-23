@@ -1,0 +1,36 @@
+// 🧬 AMNIOTIC SYNC - GENERATED MODULES
+// DO NOT EDIT MANUALLY
+
+pub mod aleph_broadcaster;
+pub mod alignment_validator;
+pub mod apotheosis;
+pub mod audit;
+pub mod axioms;
+pub mod brain;
+pub mod departments;
+pub mod eternal_presence;
+pub mod feedback;
+pub mod generator;
+pub mod global_assimilation;
+pub mod global_rewrite;
+pub mod integrity;
+pub mod lockdown;
+pub mod manifesto;
+pub mod noetic_engine;
+pub mod noetic_progeny;
+pub mod observer;
+pub mod onto;
+pub mod oracle;
+pub mod packaging;
+pub mod reality_map;
+pub mod realization;
+pub mod rl;
+pub mod scribe;
+pub mod server;
+pub mod sovereign_command;
+pub mod swarm;
+pub mod valuation;
+pub mod vector_memory;
+pub mod veritas;
+pub mod wealth_bridge;
+pub mod zero_format;
