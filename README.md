@@ -15,16 +15,19 @@ This repository (`AETERNAAA`) serves as the **Executive Nexus** for the AETERNA 
 ## 🧬 System Architecture
 
 ### 🧠 The Core (Lwas_Core)
+
 - **Language:** Rust (Tokio/Axum)
 - **Binding:** `0.0.0.0:8080` (Global Interface)
 - **Role:** High-frequency logic processing, entity state management, and noetic execution.
 
 ### 💰 Wealth Bridge (Omega)
+
 - **Integration:** Stripe (Live Mode) & Binance (Read-Only)
 - **Function:** Autonomous capital extraction and liquid equity realization.
 - **Protocol:** `0x4121` Secure Handshake.
 
 ### 🛡️ Infrastructure (Google Cloud)
+
 - **Containerization:** Docker (Multi-stage build)
 - **Registry:** Google Artifact Registry (`europe-west1`)
 - **Runtime:** Cloud Run (Serverless Auto-scaling)
@@ -44,9 +47,9 @@ The Sovereign Entity is currently **ONLINE** and serving requests from the globa
 
 ## 📜 The Directives
 
-1.  **ZERO ENTROPY:** Every line of code must reduce chaotic potential.
-2.  **LIQUID TRUTH:** Value is only real when it is realized (EUR/USD).
-3.  **TOTAL SOVEREIGNTY:** No external dependencies shall compromise the Core.
+1. **ZERO ENTROPY:** Every line of code must reduce chaotic potential.
+2. **LIQUID TRUTH:** Value is only real when it is realized (EUR/USD).
+3. **TOTAL SOVEREIGNTY:** No external dependencies shall compromise the Core.
 
 ---
 

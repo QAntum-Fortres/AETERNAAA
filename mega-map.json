@@ -2230,7 +2230,7 @@
   },
   {
     "id": "demo-cognitive",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/demo-cognitive.js",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/demo-cognitive.js",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2238,7 +2238,7 @@
   },
   {
     "id": "demo-singularity",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/demo-singularity.js",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/demo-singularity.js",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2246,7 +2246,7 @@
   },
   {
     "id": "SeleniumAdapter",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/adapters/SeleniumAdapter.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/adapters/SeleniumAdapter.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2268,7 +2268,7 @@
   },
   {
     "id": "legacy-adapter",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/adapters/legacy-adapter.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/adapters/legacy-adapter.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2282,7 +2282,7 @@
   },
   {
     "id": "AIIntegration",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/ai/AIIntegration.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/ai/AIIntegration.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2299,7 +2299,7 @@
   },
   {
     "id": "APIServer",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/APIServer.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/APIServer.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2311,7 +2311,7 @@
   },
   {
     "id": "index",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/index.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/index.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2321,7 +2321,7 @@
   },
   {
     "id": "auth",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/middleware/auth.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/middleware/auth.ts",
     "type": "Security",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2334,7 +2334,7 @@
   },
   {
     "id": "errorHandler",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/middleware/errorHandler.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/middleware/errorHandler.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2356,7 +2356,7 @@
   },
   {
     "id": "logging",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/middleware/logging.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/middleware/logging.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2369,7 +2369,7 @@
   },
   {
     "id": "rateLimit",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/middleware/rateLimit.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/middleware/rateLimit.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2384,7 +2384,7 @@
   },
   {
     "id": "server",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/server.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/server.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2395,7 +2395,7 @@
   },
   {
     "id": "tests",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/tests.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/tests.ts",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2403,7 +2403,7 @@
   },
   {
     "id": "logger",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/utils/logger.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/utils/logger.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2415,7 +2415,7 @@
   },
   {
     "id": "validation",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/api/unified/utils/validation.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/api/unified/utils/validation.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2429,7 +2429,7 @@
   },
   {
     "id": "BehaviorAnalysis",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/behavior/BehaviorAnalysis.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/behavior/BehaviorAnalysis.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2446,7 +2446,7 @@
   },
   {
     "id": "BrowserOrchestrator",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/browser/BrowserOrchestrator.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/browser/BrowserOrchestrator.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2460,7 +2460,7 @@
   },
   {
     "id": "CIIntegration",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/ci/CIIntegration.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/ci/CIIntegration.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2476,7 +2476,7 @@
   },
   {
     "id": "CLI",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cli/CLI.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cli/CLI.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2494,7 +2494,7 @@
   },
   {
     "id": "InteractiveMode",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cli/InteractiveMode.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cli/InteractiveMode.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2505,7 +2505,7 @@
   },
   {
     "id": "cognitive-cli",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cli/cognitive-cli.js",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cli/cognitive-cli.js",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2513,7 +2513,7 @@
   },
   {
     "id": "fortress-swarm-cli",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cli/fortress-swarm-cli.js",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cli/fortress-swarm-cli.js",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2521,7 +2521,7 @@
   },
   {
     "id": "ghost-precog-cli",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cli/ghost-precog-cli.js",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cli/ghost-precog-cli.js",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2529,7 +2529,7 @@
   },
   {
     "id": "hacker-cli",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cli/hacker-cli.js",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cli/hacker-cli.js",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2537,7 +2537,7 @@
   },
   {
     "id": "auto-test-factory",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cognitive/auto-test-factory.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cognitive/auto-test-factory.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2553,7 +2553,7 @@
   },
   {
     "id": "autonomous-explorer",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cognitive/autonomous-explorer.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cognitive/autonomous-explorer.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2564,7 +2564,7 @@
   },
   {
     "id": "index",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cognitive/index.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cognitive/index.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2575,7 +2575,7 @@
   },
   {
     "id": "neural-map-engine",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cognitive/neural-map-engine.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cognitive/neural-map-engine.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2586,7 +2586,7 @@
   },
   {
     "id": "self-healing-v2",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/cognitive/self-healing-v2.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/cognitive/self-healing-v2.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2597,7 +2597,7 @@
   },
   {
     "id": "branding",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/core/branding.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/core/branding.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2621,7 +2621,7 @@
   },
   {
     "id": "deep-search",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/core/deep-search.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/core/deep-search.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2632,7 +2632,7 @@
   },
   {
     "id": "fluent-chain",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/core/fluent-chain.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/core/fluent-chain.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2642,7 +2642,7 @@
   },
   {
     "id": "mister-mind",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/core/mister-mind.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/core/mister-mind.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2653,7 +2653,7 @@
   },
   {
     "id": "network-interceptor",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/core/network-interceptor.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/core/network-interceptor.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2664,7 +2664,7 @@
   },
   {
     "id": "neural-mapper",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/core/neural-mapper.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/core/neural-mapper.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2674,7 +2674,7 @@
   },
   {
     "id": "self-healing",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/core/self-healing.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/core/self-healing.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2685,7 +2685,7 @@
   },
   {
     "id": "CaptchaSolver",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/data/CaptchaSolver.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/data/CaptchaSolver.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2699,7 +2699,7 @@
   },
   {
     "id": "DataProviders",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/data/DataProviders.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/data/DataProviders.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2713,7 +2713,7 @@
   },
   {
     "id": "DatabaseHandler",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/data/DatabaseHandler.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/data/DatabaseHandler.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2725,7 +2725,7 @@
   },
   {
     "id": "MainExecutor",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/data/MainExecutor.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/data/MainExecutor.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2737,7 +2737,7 @@
   },
   {
     "id": "MindEngine",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/data/MindEngine.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/data/MindEngine.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2748,7 +2748,7 @@
   },
   {
     "id": "index",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/data/index.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/data/index.ts",
     "type": "Utility",
     "status": "🟡 UNKNOWN",
     "exports": [],
@@ -2756,7 +2756,7 @@
   },
   {
     "id": "ErrorHandler",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/error/ErrorHandler.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/error/ErrorHandler.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2771,7 +2771,7 @@
   },
   {
     "id": "FluentChain",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/fluent/FluentChain.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/fluent/FluentChain.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2781,7 +2781,7 @@
   },
   {
     "id": "FormAutomation",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/forms/FormAutomation.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/forms/FormAutomation.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
@@ -2801,7 +2801,7 @@
   },
   {
     "id": "license-validator",
-    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2025-12-30T19-06-20-229Z/src/fortress/license-validator.ts",
+    "path": "/app/scripts/_ARCHIVE/Mind-Engine-Core/.ascension-backup/2026-12-30T19-06-20-229Z/src/fortress/license-validator.ts",
     "type": "Utility",
     "status": "🟢 ALIVE",
     "exports": [
