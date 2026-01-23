@@ -239,7 +239,8 @@ impl WealthBridge {
                 .join("micro_saas");
             if let Ok(entries) = std::fs::read_dir(saas_path) {
                 let count = entries.filter_map(|e| e.ok()).count();
-                mrr = count as f64 * 800.0;
+                // [MARKET_DISRUPTION]: Sovereign Pricing at €49.99/mo (Undercutting Competitors by ~70%)
+                mrr = count as f64 * 49.99;
             }
         }
         (is_online, mrr)

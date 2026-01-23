@@ -29,8 +29,8 @@ impl RealizationEngine {
 
         loop {
             for node in saas_nodes {
-                // Симулация на реална трансакция/заявка към Saas платформата
-                let yield_amount = 1.618 * 2.0; // Базиран на Златното Сечение
+                // [REALITY_ALIGNMENT]: Simulation now reflects the Sovereign Disruption Price (€49.99)
+                let yield_amount = 49.99;
 
                 match wealth_bridge.process_extraction(node, yield_amount).await {
                     Ok(tx) => {
