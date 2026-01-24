@@ -4,12 +4,21 @@
  * Port: 8890
  */
 
-const SOVEREIGN_BASE = "http://localhost:8890/api";
+const SOVEREIGN_BASE = "/api";
 
 export const useSovereignAPI = () => {
 
     const fetchStatus = async () => {
         const response = await fetch(`${SOVEREIGN_BASE}/status`);
+        return await response.json();
+    };
+
+    const createCheckoutSession = async (productId: string) => {
+        const response = await fetch(`${SOVEREIGN_BASE}/omega/checkout`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId })
+        });
         return await response.json();
     };
 
@@ -36,5 +45,5 @@ export const useSovereignAPI = () => {
         return await response.json();
     };
 
-    return { fetchStatus, runRefactor, askOracle, generateAssets };
+    return { fetchStatus, runRefactor, askOracle, generateAssets, createCheckoutSession };
 };

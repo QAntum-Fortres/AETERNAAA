@@ -69,21 +69,30 @@ async fn main() {
         organism: Mutex::new(organism),
     });
 
-    let app = Router::new()
-        .route("/command", post(handle_command))
-        .route("/telemetry", get(handle_telemetry))
-        .route("/reality-map", get(handle_reality_map))
-        .layer(CorsLayer::permissive())
-        .with_state(shared_state.clone());
+    // [ENTERPRISE_CORE]: Unified Server Launch
+    // We leverage the newly manifested organism's components
+    let (vsh, audit, wealth_bridge, scribe) = {
+        let org = shared_state.organism.lock().await;
+        (
+            org.vsh.clone(),
+            org.audit.clone(),
+            org.wealth_bridge.clone(),
+            org.scribe.clone(),
+        )
+    };
 
+    let core_state = Arc::new(lwas_core::omega::server::ServerState {
+        vsh,
+        audit,
+        enforcer: scribe,
+        wealth_bridge,
+    });
+
+    println!("🚀 [AETERNA]: Handing over control to SINGULARITY SERVER (Enterprise Core)...");
+
+    // Spawn the core server which handles UI, Auth, and API
     tokio::spawn(async move {
-        let addr = std::env::var("SERVER_HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
-        let port = std::env::var("PORT").unwrap_or_else(|_| "8890".to_string());
-        let bind_addr = format!("{}:{}", addr, port);
-
-        let listener = tokio::net::TcpListener::bind(&bind_addr).await.unwrap();
-        println!("📡 [NEURAL_LINK]: API Active on {}", bind_addr);
-        axum::serve(listener, app).await.unwrap();
+        lwas_core::omega::server::start_singularity_server(core_state).await;
     });
 
     {

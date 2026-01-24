@@ -1,4 +1,4 @@
-# AETERNA: The Sovereign Logos
+/# AETERNA: The Sovereign Logos
 
 > "We do not predict the future. We compute it."
 

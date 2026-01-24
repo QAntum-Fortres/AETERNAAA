@@ -7,3 +7,10 @@ export type Manifold = { id: string, curvature: number, points: Array<string>, e
 export type QuantumPoint = { id: string, coordinates: Array<number>, metadata: string, q_value: number, visits: bigint, success_count: bigint, success_rate: number, resonance: number, entropy: number, };
 
 export type VshState = { total_points: number, entropy: number, };
+
+export interface GlobalState {
+    liquid_equity: number;
+    total_nodes: number;
+    entropy: number;
+    mrr_eur: number;
+}
