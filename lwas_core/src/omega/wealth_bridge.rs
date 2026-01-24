@@ -13,7 +13,6 @@ pub struct Transaction {
     pub amount_eur: f64,
     pub asset_source: String,
     pub timestamp: String,
-    pub checkout_url: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -158,7 +157,6 @@ impl WealthBridge {
 
         let stripe_key = std::env::var("STRIPE_SECRET_KEY").unwrap_or_else(|_| "NONE".into());
         let mut stripe_id = String::new();
-        let mut stripe_url = None;
 
         if stripe_key != "NONE"
             && !stripe_key.contains("PLACEHOLDER")
@@ -203,7 +201,6 @@ impl WealthBridge {
                         if let Some(url) = json["url"].as_str() {
                             println!("🚀 [STRIPE_LIVE]: СЕСИЯТА Е СЪЗДАДЕНА: {}", url);
                             stripe_id = json["id"].as_str().unwrap_or("LIVE_SUCCESS").to_string();
-                            stripe_url = Some(url.to_string());
                         }
                     }
                 }
@@ -223,7 +220,6 @@ impl WealthBridge {
             amount_eur: amount,
             asset_source: saas_name.to_string(),
             timestamp: chrono::Local::now().to_rfc3339(),
-            checkout_url: stripe_url,
         };
 
         println!(
