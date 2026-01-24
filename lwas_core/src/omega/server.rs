@@ -60,16 +60,7 @@ pub async fn start_singularity_server(state: Arc<ServerState>) {
 }
 
 async fn get_status(State(state): State<Arc<ServerState>>) -> impl IntoResponse {
-    let vsh_state = state.vsh.get_state();
-    let (_, mrr) = state.wealth_bridge.get_status();
-    let liquid_equity = mrr * 12.0 * 5.0; // Simple valuation model
-
-    Json(json!({
-        "total_points": vsh_state.total_points,
-        "entropy": vsh_state.entropy,
-        "liquid_equity": liquid_equity,
-        "total_nodes": vsh_state.total_points
-    }))
+    Json(state.vsh.get_state())
 }
 
 async fn run_auto_refactor(State(state): State<Arc<ServerState>>) -> impl IntoResponse {
@@ -122,11 +113,9 @@ async fn create_checkout_session(
         .process_extraction(product_name, 49.99)
         .await
     {
-        Ok(tx) => {
-            let default_url = format!("https://checkout.stripe.com/pay/{}", tx.id);
-            let url = tx.checkout_url.as_ref().unwrap_or(&default_url);
-            Json(json!({ "status": "SUCCESS", "checkout_url": url, "tx_id": tx.id }))
-        }
+        Ok(tx) => Json(
+            json!({ "status": "SUCCESS", "checkout_url": format!("https://checkout.stripe.com/pay/{}", tx.id), "tx_id": tx.id }),
+        ),
         Err(e) => Json(json!({ "status": "ERROR", "message": format!("{}", e) })),
     }
 }
