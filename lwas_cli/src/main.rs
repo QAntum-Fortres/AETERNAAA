@@ -69,6 +69,11 @@ async fn main() {
         organism: Mutex::new(organism),
     });
 
+    println!("📂 [DIAG]: Current DIR: {:?}", std::env::current_dir().unwrap_or_default());
+    println!("📂 [DIAG]: Checking for UI artifacts in helios-ui/dist...");
+    let ui_exists = std::path::Path::new("helios-ui/dist/index.html").exists();
+    println!("📂 [DIAG]: UI index.html exists: {}", ui_exists);
+
     // [ENTERPRISE_CORE]: Unified Server Launch
     // We leverage the newly manifested organism's components
     let (vsh, audit, wealth_bridge, scribe) = {
@@ -88,23 +93,25 @@ async fn main() {
         wealth_bridge,
     });
 
-    println!("🚀 [AETERNA]: Handing over control to SINGULARITY SERVER (Enterprise Core)...");
-
-    // Spawn the core server which handles UI, Auth, and API
-    tokio::spawn(async move {
+    println!("🚀 [AETERNA]: Launching SINGULARITY SERVER...");
+    
+    // START SERVER IMMEDIATELY (Main thread block preferred for Cloud Run)
+    let core_server = tokio::spawn(async move {
         lwas_core::omega::server::start_singularity_server(core_state).await;
     });
 
-    {
+    // Ignite organism in parallel
+    let organism_igniter = tokio::spawn(async move {
         let mut org = shared_state.organism.lock().await;
+        println!("🔥 [AETERNA]: Igniting Organism...");
         if let Err(e) = org.ignite().await {
             println!("🚨 [FATAL]: Unification Collapse: {}", e);
         }
-    }
+    });
 
-    loop {
-        tokio::time::sleep(tokio::time::Duration::from_secs(3600)).await;
-    }
+    // Keep process alive by joining the server task
+    let _ = core_server.await;
+    let _ = organism_igniter.await;
 }
 
 async fn handle_telemetry(State(state): State<Arc<AppState>>) -> Json<TelemetryResponse> {
