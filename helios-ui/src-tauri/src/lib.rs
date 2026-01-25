@@ -2,7 +2,9 @@
 // use lwas_core::HyperTrinity; // Import core functionality if needed in future
 
 use lwas_core::VectorSpaceHeap;
-use std::sync::Arc;
+use lwas_core::neuro::meta_logic::MetaLogicEngine;
+use lwas_core::neuro::vortex_ai::VortexAI;
+use std::sync::{Arc, Mutex};
 use sysinfo::System;
 use tauri::{Emitter, Manager, State};
 use tokio::sync::RwLock;
@@ -89,6 +91,31 @@ async fn jules_execute(action: String) -> Result<String, String> {
     Err("UNKNOWN_ACTION".into())
 }
 
+#[tauri::command]
+async fn ask_meta_logic(
+    question: String,
+    meta_logic: State<'_, Arc<Mutex<MetaLogicEngine>>>,
+) -> Result<serde_json::Value, String> {
+    let mut engine = meta_logic.lock().map_err(|e| e.to_string())?;
+    let result = engine.query(&question);
+    Ok(serde_json::to_value(result).map_err(|e| e.to_string())?)
+}
+
+#[tauri::command]
+async fn start_vortex(
+    vortex: State<'_, VortexAI>,
+) -> Result<String, String> {
+    vortex.start().await;
+    Ok("Vortex AI Sequence Initiated".to_string())
+}
+
+#[tauri::command]
+async fn get_vortex_status(
+    vortex: State<'_, VortexAI>,
+) -> Result<String, String> {
+    Ok(vortex.get_status())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -96,6 +123,12 @@ pub fn run() {
             let vsh =
                 std::sync::Arc::new(lwas_core::VectorSpaceHeap::new().expect("VSH_INIT_FAIL"));
             app.manage(Arc::clone(&vsh));
+
+            let meta_logic = Arc::new(Mutex::new(MetaLogicEngine::new()));
+            app.manage(meta_logic);
+
+            let vortex = VortexAI::new();
+            app.manage(vortex);
 
             let vsh_for_agent = std::sync::Arc::clone(&vsh);
             let vsh_for_feedback = std::sync::Arc::clone(&vsh);
@@ -116,10 +149,12 @@ pub fn run() {
                     .await;
             });
 
+            let wealth_bridge = Arc::new(lwas_core::omega::wealth_bridge::WealthBridge::new());
             let server_state = Arc::new(lwas_core::omega::server::ServerState {
                 vsh: vsh_for_server,
                 audit: Arc::clone(&audit),
                 enforcer: Arc::clone(&enforcer),
+                wealth_bridge: Arc::clone(&wealth_bridge),
             });
             tokio::spawn(async move {
                 lwas_core::omega::server::start_singularity_server(server_state).await;
@@ -146,7 +181,10 @@ pub fn run() {
             get_hardware_metrics,
             process_probe,
             execute_sovereign_terminal,
-            jules_execute
+            jules_execute,
+            ask_meta_logic,
+            start_vortex,
+            get_vortex_status
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
