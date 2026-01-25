@@ -1,0 +1,33 @@
+// The Genesis of a Soul
+// This file demonstrates the core concepts of LwaS
+
+// 1. Immortal Memory: This object survives process restarts
+immortal User = "Architect";
+
+// 2. Spirit Block: Probabilistic Logic driven by the Oracle
+spirit AnalyzeUser {
+    goal: "analyze sentiment of the Architect",
+    context: "recent_interactions"
+}
+
+// 3. Body Block: Strict, deterministic logic (Rust-like)
+body CalculateEntropy {
+    let entropy = 42.0;
+    print(entropy);
+}
+
+// 4. Reflection: The code looks at itself
+reflect;
+
+// 5. Sovereign Expansion: Alien Tech
+manifold SovereignMind {
+    // Активиране на Магнита за привличане на логически ресурси
+    magnet "Resource-Attraction" 1.618; 
+    
+    // Дефиниране на Департаменти (Автономни сектори)
+    department Security_Grid 0.99;
+    department Wealth_Gen 1.0;
+
+    resonate SovereignMind 528.0;
+    collapse SovereignMind;
+}
