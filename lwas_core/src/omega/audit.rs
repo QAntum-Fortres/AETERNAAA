@@ -220,7 +220,9 @@ impl SovereignAudit {
                 id: format!("{}-{}", title.replace(" ", "-"), self.findings.len()),
                 f_type,
                 title: title.into(),
-                files: vec![PathBuf::from("lwas_core/src/organism.rs")],
+                files: vec![PathBuf::from(
+                    "C:\\RUST-LANGUAGE\\QANTUM-JULES\\lwas_core\\src\\organism.rs",
+                )],
                 impact_lines: 1,
                 suggestion: sugg.into(),
             });

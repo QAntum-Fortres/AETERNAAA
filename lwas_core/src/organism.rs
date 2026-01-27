@@ -71,7 +71,7 @@ impl SovereignOrganism {
 
     pub async fn perform_self_audit(&self) -> SovereignResult<usize> {
         let mut audit = self.audit.write().await;
-        let project_path = PathBuf::from(".");
+        let project_path = PathBuf::from("C:\\RUST-LANGUAGE\\QANTUM-JULES");
         audit.run_full_audit(vec![project_path]).await?;
         Ok(audit.findings.len())
     }
