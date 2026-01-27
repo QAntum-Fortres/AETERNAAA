@@ -3,7 +3,7 @@
  * ║  AETERNAAA TELEGRAM UPLINK                                                ║
  * ║  "The Eye that Never Sleeps" - Mobile Command Center                      ║
  * ║                                                                           ║
- * ║  📱 Secure Mobile Command for aestera.website                            ║
+ * ║  📱 Secure Mobile Command for aeterna.website                            ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  */
 
@@ -119,7 +119,7 @@ export class TelegramUplink extends EventEmitter {
         if (!this.allowedUsers.has(chatId)) {
             if (text === MASTER_UPLINK_CODE) {
                 this.allowedUsers.add(chatId);
-                await this.sendMessage(chatId, `🌌 **AETERNAAA ACCESS GRANTED**\n\nWelcome to aestera.website command center, Architect.\n\n_Sovereign uplink established._`);
+                await this.sendMessage(chatId, `🌌 **AETERNAAA ACCESS GRANTED**\n\nWelcome to aeterna.website command center, Architect.\n\n_Sovereign uplink established._`);
                 this.logger.info('TELEGRAM', `New admin authorized: ${user} (${chatId})`);
                 
                 // Send welcome commands
@@ -195,7 +195,7 @@ export class TelegramUplink extends EventEmitter {
         try {
             // Get status from AETERNAAA API
             const status = `🌌 **AETERNAAA STATUS**\n\n` +
-                `🖥️ **Backend:** ONLINE (aestera.website)\n` +
+                `🖥️ **Backend:** ONLINE (aeterna.website)\n` +
                 `🔗 **API:** Operational (Port 8890)\n` +
                 `💰 **Payment Gateway:** Stripe LIVE\n` +
                 `📊 **SaaS Apps:** 4 Active\n` +
@@ -234,19 +234,19 @@ export class TelegramUplink extends EventEmitter {
             `_AI network performance optimization_\n\n` +
             `💎 **Valuation Gate AI** - €799/mo\n` +
             `_Automated asset valuation platform_\n\n` +
-            `🔗 View all: https://aestera.website/saas`;
+            `🔗 View all: https://aeterna.website/saas`;
 
         await this.sendMessage(chatId, apps);
     }
 
     private async deployApplication(appName: string, chatId: string): Promise<void> {
-        await this.sendMessage(chatId, `🚀 **DEPLOYING ${appName.toUpperCase()}**\n\nInitiating deployment to aestera.website...\n\n_This will take 2-3 minutes._`);
+        await this.sendMessage(chatId, `🚀 **DEPLOYING ${appName.toUpperCase()}**\n\nInitiating deployment to aeterna.website...\n\n_This will take 2-3 minutes._`);
         
         // Simulate deployment
         setTimeout(async () => {
             await this.sendMessage(chatId, 
                 `✅ **DEPLOYMENT SUCCESS**\n\n` +
-                `🌐 **Live URL:** https://${appName}.aestera.website\n` +
+                `🌐 **Live URL:** https://${appName}.aeterna.website\n` +
                 `📊 **Health:** 100%\n` +
                 `💰 **Revenue Tracking:** Enabled\n\n` +
                 `_${appName} is now generating revenue._`
@@ -293,7 +293,7 @@ export class TelegramUplink extends EventEmitter {
             `**/help** - Show this help\n\n` +
             `**Natural Language:**\n` +
             `Just type your question and AI will respond.\n\n` +
-            `🔗 **Dashboard:** https://aestera.website`;
+            `🔗 **Dashboard:** https://aeterna.website`;
 
         await this.sendMessage(chatId, help);
     }
@@ -318,7 +318,7 @@ export class TelegramUplink extends EventEmitter {
     }
 
     public async sendRevenueAlert(amount: number, source: string): Promise<void> {
-        const alert = `💰 **NEW REVENUE**\n\n€${amount} from ${source}\n\nvia aestera.website`;
+        const alert = `💰 **NEW REVENUE**\n\n€${amount} from ${source}\n\nvia aeterna.website`;
         await this.broadcast(alert);
     }
 

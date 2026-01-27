@@ -373,12 +373,12 @@ export class SaaSOrchestrator extends EventEmitter {
     }
 
     private async deploySaaSApplication(app: SaaSApplication): Promise<void> {
-        // Deploy to aestera.website subdomain
-        this.logger.info('SAAS', `Deploying ${app.name} to ${app.id}.aestera.website`);
+        // Deploy to aeterna.website subdomain
+        this.logger.info('SAAS', `Deploying ${app.name} to ${app.id}.aeterna.website`);
         
         // Generate deployment configuration
         const deploy_config = {
-            domain: `${app.id}.aestera.website`,
+            domain: `${app.id}.aeterna.website`,
             environment: 'production',
             features: app.features,
             pricing: app.price

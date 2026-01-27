@@ -1,14 +1,14 @@
-# 🌐 AEStera.website - Domain Configuration
+# 🌐 aeterna.website - Domain Configuration
 
 ## Custom Domain Setup
 
-### Domain: `aestera.website`
+### Domain: `aeterna.website`
 
 **Services:**
-- **Frontend:** `aestera.website` (main site)
-- **API:** `api.aestera.website` (backend)
-- **WebSocket:** `ws.aestera.website` (real-time)
-- **SaaS Apps:** `{app}.aestera.website` (subdomains)
+- **Frontend:** `aeterna.website` (main site)
+- **API:** `api.aeterna.website` (backend)
+- **WebSocket:** `ws.aeterna.website` (real-time)
+- **SaaS Apps:** `{app}.aeterna.website` (subdomains)
 
 ## DNS Configuration
 
@@ -17,7 +17,7 @@ Configure these DNS records:
 ```
 Type    Name              Value                          TTL
 A       @                 [Render IP or CNAME]          3600
-CNAME   www               aestera.website               3600
+CNAME   www               aeterna.website               3600
 CNAME   api               aeterna-backend.onrender.com  3600
 CNAME   ws                aeterna-middleware.onrender.com 3600
 A       *                 [Render IP for subdomains]    3600
@@ -30,9 +30,9 @@ A       *                 [Render IP for subdomains]    3600
 
 2. **Custom Domain Configuration**
    - Service: `aeterna-frontend`
-   - Add domain: `aestera.website`
-   - Add domain: `www.aestera.website`
-   - Add domain: `api.aestera.website` (for backend)
+   - Add domain: `aeterna.website`
+   - Add domain: `www.aeterna.website`
+   - Add domain: `api.aeterna.website` (for backend)
 
 3. **SSL Certificate**
    - Render provides automatic SSL via Let's Encrypt
@@ -45,17 +45,17 @@ A       *                 [Render IP for subdomains]    3600
 
 2. **Custom Domain**
    - Go to service settings
-   - Add custom domain: `aestera.website`
+   - Add custom domain: `aeterna.website`
    - Configure DNS as instructed
 
 ## SaaS Subdomains
 
 Each SaaS application gets its own subdomain:
 
-- `wealth-scanner.aestera.website` - Wealth Scanner Pro
-- `sector-security.aestera.website` - Sector Security Suite  
-- `network-optimizer.aestera.website` - Network Optimizer Pro
-- `valuation-gate.aestera.website` - Valuation Gate AI
+- `wealth-scanner.aeterna.website` - Wealth Scanner Pro
+- `sector-security.aeterna.website` - Sector Security Suite  
+- `network-optimizer.aeterna.website` - Network Optimizer Pro
+- `valuation-gate.aeterna.website` - Valuation Gate AI
 
 ## Environment Variables Update
 
@@ -63,15 +63,15 @@ Update these in deployment platform:
 
 ```bash
 # Frontend
-VITE_API_URL=https://api.aestera.website
-VITE_WS_URL=wss://ws.aestera.website
+VITE_API_URL=https://api.aeterna.website
+VITE_WS_URL=wss://ws.aeterna.website
 
 # Backend
-CORS_ORIGIN=https://aestera.website
+CORS_ORIGIN=https://aeterna.website
 
 # Payment success/cancel URLs
-STRIPE_SUCCESS_URL=https://aestera.website/success
-STRIPE_CANCEL_URL=https://aestera.website/cancel
+STRIPE_SUCCESS_URL=https://aeterna.website/success
+STRIPE_CANCEL_URL=https://aeterna.website/cancel
 ```
 
 ## SSL & Security
@@ -84,9 +84,9 @@ STRIPE_CANCEL_URL=https://aestera.website/cancel
 ## Monitoring
 
 Health check URLs:
-- https://aestera.website/health (frontend)
-- https://api.aestera.website/telemetry (backend)
-- https://api.aestera.website/api/status (middleware)
+- https://aeterna.website/health (frontend)
+- https://api.aeterna.website/telemetry (backend)
+- https://api.aeterna.website/api/status (middleware)
 
 ## Launch Checklist
 
@@ -100,6 +100,6 @@ Health check URLs:
 
 ---
 
-**Status:** Ready for aestera.website deployment
+**Status:** Ready for aeterna.website deployment
 **Telegram Command:** 967408 (master access code)
 **Revenue Potential:** €95,000+ MRR from SaaS portfolio

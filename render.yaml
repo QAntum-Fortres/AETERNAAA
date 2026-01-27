@@ -11,7 +11,7 @@ services:
     dockerfilePath: Dockerfile.backend
     healthCheckPath: /telemetry
     domains:
-      - api.aestera.website
+      - api.aeterna.website
     envVars:
       - key: PORT
         value: 8890
@@ -26,7 +26,7 @@ services:
       - key: EXCHANGE_SECRET_KEY
         sync: false
       - key: CORS_ORIGIN
-        value: https://aestera.website
+        value: https://aeterna.website
 
   # TypeScript Middleware Service
   - type: web
@@ -62,10 +62,10 @@ services:
     buildCommand: cd helios-ui && npm install && npm run build
     staticPublishPath: helios-ui/dist
     domains:
-      - aestera.website
-      - www.aestera.website
+      - aeterna.website
+      - www.aeterna.website
     envVars:
       - key: VITE_API_URL
-        value: https://api.aestera.website
+        value: https://api.aeterna.website
       - key: VITE_WS_URL
-        value: wss://ws.aestera.website
+        value: wss://ws.aeterna.website
