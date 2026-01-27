@@ -13,6 +13,7 @@ import { MetricsChart } from './MetricsChart';
 import { NeuralMeshCanvas } from './NeuralMeshCanvas';
 import { GlobalState } from '../types/sovereign';
 import MoneyDashboard from './MoneyDashboard';
+import MainSaaSPlatform from './MainSaaSPlatform';
 
 // --- SUBCOMPONENTS ---
 
@@ -54,7 +55,7 @@ const StatCard = ({ label, value, color }: { label: string, value: string, color
 
 // --- MAIN COMPONENT ---
 
-type Page = 'dashboard' | 'chat' | 'terminal' | 'skilltree' | 'market' | 'intelligence' | 'omega' | 'physics' | 'fortress' | 'biology' | 'guardians' | 'reality' | 'chemistry' | 'money';
+type Page = 'dashboard' | 'chat' | 'terminal' | 'skilltree' | 'market' | 'intelligence' | 'omega' | 'physics' | 'fortress' | 'biology' | 'guardians' | 'reality' | 'chemistry' | 'money' | 'saas';
 
 interface Message {
     id: string;
@@ -197,6 +198,7 @@ export const SovereignHUD = () => {
                         <NavItem icon={TerminalIcon} label="Terminal" active={activePage === 'terminal'} onClick={() => setActivePage('terminal')} />
                         <NavItem icon={ShoppingBag} label="Market" active={activePage === 'market'} onClick={() => setActivePage('market')} color="--neon-gold" />
                         <NavItem icon={DollarSign} label="Money" active={activePage === 'money'} onClick={() => setActivePage('money')} color="--neon-green" />
+                        <NavItem icon={Globe} label="SaaS Hub" active={activePage === 'saas'} onClick={() => setActivePage('saas')} color="--neon-cyan" />
                         <NavItem icon={GitBranch} label="Skill Tree" active={activePage === 'skilltree'} onClick={() => setActivePage('skilltree')} />
                     </div>
                     <div className="space-y-1">
@@ -357,6 +359,12 @@ export const SovereignHUD = () => {
                         {activePage === 'money' && (
                             <motion.div key="money" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full overflow-auto">
                                 <MoneyDashboard />
+                            </motion.div>
+                        )}
+
+                        {activePage === 'saas' && (
+                            <motion.div key="saas" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full overflow-auto">
+                                <MainSaaSPlatform />
                             </motion.div>
                         )}
                     </AnimatePresence>
