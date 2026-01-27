@@ -88,7 +88,7 @@ async fn main() {
         .with_state(shared_state.clone());
 
     // Start HTTP server IMMEDIATELY for healthcheck
-    tokio::spawn(async move {
+    let server_handle = tokio::spawn(async move {
         let listener = tokio::net::TcpListener::bind("0.0.0.0:8890")
             .await
             .unwrap();
@@ -96,39 +96,41 @@ async fn main() {
         axum::serve(listener, app).await.unwrap();
     });
 
-    // Give server time to start
-    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+    // Initialize organism in background (non-blocking)
+    let state_clone = shared_state.clone();
+    tokio::spawn(async move {
+        let soul_path = "../AETERNA_ANIMA.soul";
+        let soul_content = match fs::read_to_string(soul_path) {
+            Ok(content) => content,
+            Err(_) => {
+                println!("🚨 [ERROR]: AETERNA_ANIMA.soul NOT FOUND. Using default.");
+                "SOUL_ID: DEFAULT\nNAME: AETERNA".to_string()
+            }
+        };
 
-    // Now initialize organism in background
-    let soul_path = "../AETERNA_ANIMA.soul";
-    let soul_content = match fs::read_to_string(soul_path) {
-        Ok(content) => content,
-        Err(_) => {
-            println!("🚨 [ERROR]: AETERNA_ANIMA.soul NOT FOUND. Using default.");
-            "SOUL_ID: DEFAULT\nNAME: AETERNA".to_string()
+        println!("🧬 [MANIFEST]: Initializing organism...");
+        let organism = SovereignOrganism::manifest(&soul_content);
+        
+        {
+            let mut org_lock = state_clone.organism.lock().await;
+            *org_lock = Some(organism);
+            state_clone.ready.store(true, std::sync::atomic::Ordering::SeqCst);
         }
-    };
 
-    let organism = SovereignOrganism::manifest(&soul_content);
-    
-    {
-        let mut org_lock = shared_state.organism.lock().await;
-        *org_lock = Some(organism);
-        shared_state.ready.store(true, std::sync::atomic::Ordering::SeqCst);
-    }
-
-    {
-        let mut org_lock = shared_state.organism.lock().await;
-        if let Some(ref mut org) = *org_lock {
-            if let Err(e) = org.ignite().await {
-                println!("🚨 [FATAL]: Unification Collapse: {}", e);
+        {
+            let mut org_lock = state_clone.organism.lock().await;
+            if let Some(ref mut org) = *org_lock {
+                println!("🔥 [IGNITE]: Starting organism ignition...");
+                if let Err(e) = org.ignite().await {
+                    println!("🚨 [FATAL]: Unification Collapse: {}", e);
+                }
             }
         }
-    }
+        println!("✅ [READY]: Organism fully initialized and operational");
+    });
 
-    loop {
-        tokio::time::sleep(tokio::time::Duration::from_secs(3600)).await;
-    }
+    // Keep process alive
+    server_handle.await.unwrap();
 }
 
 async fn handle_telemetry(State(state): State<Arc<AppState>>) -> Json<TelemetryResponse> {
