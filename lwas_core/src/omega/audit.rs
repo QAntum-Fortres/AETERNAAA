@@ -31,11 +31,11 @@
 // [PURIFIED_BY_AETERNA: 889bdd1e-0aaf-4251-ab92-193e15efce12]
 // Suggestion: Review and entrench stable logic.
 use crate::prelude::*;
-use ignore::WalkBuilder;
 use memmap2::Mmap;
 use regex::Regex;
 use std::fs;
 use std::path::{Path, PathBuf};
+use walkdir::WalkDir;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum FindingType {
@@ -101,16 +101,22 @@ impl SovereignAudit {
 
     fn build_registry(&self, paths: &[PathBuf]) -> SovereignResult<()> {
         paths.par_iter().for_each(|path| {
-            let walker = WalkBuilder::new(path).standard_filters(true).build();
-
-            for entry in walker.flatten() {
-                if entry.file_type().map_or(false, |ft| ft.is_file()) {
-                    if let Some(ext) = entry.path().extension() {
-                        if ext == "rs" || ext == "ts" || ext == "js" {
-                            self.index_file(entry.path());
-                        }
-                    }
-                }
+            for entry in WalkDir::new(path)
+                .into_iter()
+                .flatten()
+                .filter_map(|e| {
+                    let path = e.path();
+                    path.extension()
+                        .and_then(|ext| {
+                            if ext == "rs" || ext == "ts" || ext == "js" {
+                                Some(path.to_path_buf())
+                            } else {
+                                None
+                            }
+                        })
+                        .map(|_| e)
+                }) {
+                self.index_file(entry.path());
             }
         });
         Ok(())
@@ -158,27 +164,26 @@ impl SovereignAudit {
         let findings: Vec<AuditFinding> = paths
             .par_iter()
             .flat_map(|path| {
-                let walker = WalkBuilder::new(path).standard_filters(true).build();
-
                 let mut local_findings = Vec::new();
 
-                for entry in walker.flatten() {
-                    if entry.file_type().map_or(false, |ft| ft.is_file()) {
-                        if let Ok(file) = fs::File::open(entry.path()) {
-                            if let Ok(mmap) = unsafe { Mmap::map(&file) } {
-                                let content = String::from_utf8_lossy(&mmap);
+                for entry in WalkDir::new(path)
+                    .into_iter()
+                    .flatten()
+                    .filter(|e| e.path().is_file()) {
+                    if let Ok(file) = fs::File::open(entry.path()) {
+                        if let Ok(mmap) = unsafe { Mmap::map(&file) } {
+                            let content = String::from_utf8_lossy(&mmap);
 
-                                for (re, f_type, title) in &patterns {
-                                    if re.is_match(&content) {
-                                        local_findings.push(AuditFinding {
-                                            id: Uuid::new_v4().to_string(),
-                                            f_type: f_type.clone(),
-                                            title: title.to_string(),
-                                            files: vec![entry.path().to_path_buf()],
-                                            impact_lines: 1, // Simplified
-                                            suggestion: "Review and entrench stable logic.".into(),
-                                        });
-                                    }
+                            for (re, f_type, title) in &patterns {
+                                if re.is_match(&content) {
+                                    local_findings.push(AuditFinding {
+                                        id: Uuid::new_v4().to_string(),
+                                        f_type: f_type.clone(),
+                                        title: title.to_string(),
+                                        files: vec![entry.path().to_path_buf()],
+                                        impact_lines: 1, // Simplified
+                                        suggestion: "Review and entrench stable logic.".into(),
+                                    });
                                 }
                             }
                         }
