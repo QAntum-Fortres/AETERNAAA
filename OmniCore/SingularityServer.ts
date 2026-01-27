@@ -22,6 +22,7 @@ import { Telemetry } from './telemetry/Telemetry';
 import { Logger } from './telemetry/Logger';
 import { PaymentGateway } from './economy/PaymentGateway';
 import { ProductCatalog, PRODUCTS } from './economy/Products';
+import { SaaSAPI } from './api/SaaSAPI';
 import * as path from 'path';
 
 /**
@@ -36,6 +37,7 @@ export class SingularityServer {
   private telemetry: Telemetry;
   private logger: Logger;
   private paymentGateway: PaymentGateway;
+  private saasAPI: SaaSAPI;
 
   constructor(port: number = 8890) {
     this.port = port;
@@ -45,6 +47,7 @@ export class SingularityServer {
     this.telemetry = Telemetry.getInstance();
     this.logger = Logger.getInstance();
     this.paymentGateway = new PaymentGateway();
+    this.saasAPI = new SaaSAPI();
 
     // Configure payment gateway from environment variables
     const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -144,6 +147,9 @@ export class SingularityServer {
         response: `[Intelligence Node] Analyzed query: ${result.processed}. Confidence: ${result.confidence.toFixed(2)}`,
       });
     });
+
+    // --- SaaS Platform API ---
+    this.app.use('/api', this.saasAPI.getRouter());
 
     // --- Static Files ---
     const dashboardDir = path.join(process.cwd(), 'dashboard');

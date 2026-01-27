@@ -4,6 +4,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import * as http from 'http';
 import * as path from 'path';
 import { SingularityServer } from './SingularityServer';
+import { TelegramUplink } from './telegram/TelegramUplink';
 
 /**
  * 🧠 QANTUM OMNICORE - SINGULARITY SERVER v3.0
@@ -18,6 +19,30 @@ const httpPort = 8890;
 // --- SINGULARITY SERVER (Payment Gateway + API) ---
 const singularityServer = new SingularityServer(httpPort);
 singularityServer.start();
+
+// --- TELEGRAM UPLINK (Mobile Command Center) ---
+const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
+let telegramUplink: TelegramUplink | null = null;
+
+if (telegramToken && !telegramToken.includes('PLACEHOLDER')) {
+    telegramUplink = new TelegramUplink(telegramToken);
+    
+    // Handle AI queries from Telegram
+    telegramUplink.on('ai_query', async (data) => {
+        // Forward to AETERNAAA AI system
+        console.log(`📱 [TELEGRAM] AI Query: ${data.query}`);
+        // Response would come from /api/ask endpoint
+    });
+    
+    // Handle commands from Telegram
+    telegramUplink.on('command', async (data) => {
+        console.log(`📱 [TELEGRAM] Command: ${data.command}`);
+    });
+    
+    console.log('📱 [TELEGRAM] Mobile command center active (Code: 967408)');
+} else {
+    console.log('📱 [TELEGRAM] No token configured - mobile commands disabled');
+}
 
 // --- WEBSOCKET ENGINE ---
 const wsApp = express();

@@ -6,10 +6,12 @@ services:
   - type: web
     name: aeterna-backend
     env: docker
-    plan: starter
+    plan: pro
     dockerContext: .
     dockerfilePath: Dockerfile.backend
     healthCheckPath: /telemetry
+    domains:
+      - api.aestera.website
     envVars:
       - key: PORT
         value: 8890
@@ -23,6 +25,8 @@ services:
         sync: false
       - key: EXCHANGE_SECRET_KEY
         sync: false
+      - key: CORS_ORIGIN
+        value: https://aestera.website
 
   # TypeScript Middleware Service
   - type: web
@@ -54,10 +58,14 @@ services:
   - type: web
     name: aeterna-frontend
     env: static
+    plan: starter
     buildCommand: cd helios-ui && npm install && npm run build
     staticPublishPath: helios-ui/dist
+    domains:
+      - aestera.website
+      - www.aestera.website
     envVars:
       - key: VITE_API_URL
-        value: https://aeterna-backend.onrender.com
+        value: https://api.aestera.website
       - key: VITE_WS_URL
-        value: wss://aeterna-middleware.onrender.com
+        value: wss://ws.aestera.website
