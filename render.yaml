@@ -1,10 +1,15 @@
+# Render.com Production Deployment Configuration
+# Multi-service setup for AETERNAAA
+
 services:
+  # Rust Backend Service
   - type: web
-    name: aeterna-core
+    name: aeterna-backend
     env: docker
-    plan: free
+    plan: starter
     dockerContext: .
-    healthCheckPath: /api/status
+    dockerfilePath: Dockerfile.backend
+    healthCheckPath: /telemetry
     envVars:
       - key: PORT
         value: 8890
@@ -12,3 +17,47 @@ services:
         value: info
       - key: AETERNA_ENV
         value: production
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: EXCHANGE_API_KEY
+        sync: false
+      - key: EXCHANGE_SECRET_KEY
+        sync: false
+
+  # TypeScript Middleware Service
+  - type: web
+    name: aeterna-middleware
+    env: docker
+    plan: starter
+    dockerContext: ./OmniCore
+    dockerfilePath: ../Dockerfile.middleware
+    healthCheckPath: /api/status
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HTTP_PORT
+        value: 8890
+      - key: WS_PORT
+        value: 8765
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: EXCHANGE_API_KEY
+        sync: false
+      - key: EXCHANGE_SECRET_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://aeterna-backend.onrender.com
+
+  # Frontend Service (Static)
+  - type: web
+    name: aeterna-frontend
+    env: static
+    buildCommand: cd helios-ui && npm install && npm run build
+    staticPublishPath: helios-ui/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://aeterna-backend.onrender.com
+      - key: VITE_WS_URL
+        value: wss://aeterna-middleware.onrender.com

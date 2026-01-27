@@ -1,0 +1,40 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile.backend"
+  },
+  "deploy": {
+    "startCommand": "./lwas_cli ignite",
+    "healthcheckPath": "/telemetry",
+    "healthcheckTimeout": 100,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  },
+  "services": [
+    {
+      "name": "backend",
+      "source": {
+        "repo": "https://github.com/QAntum-Fortres/AETERNAAA",
+        "dockerfilePath": "Dockerfile.backend"
+      },
+      "variables": {
+        "PORT": "8890",
+        "RUST_LOG": "info"
+      }
+    },
+    {
+      "name": "middleware",
+      "source": {
+        "repo": "https://github.com/QAntum-Fortres/AETERNAAA",
+        "dockerfilePath": "Dockerfile.middleware",
+        "dockerContext": "OmniCore"
+      },
+      "variables": {
+        "NODE_ENV": "production",
+        "HTTP_PORT": "8890",
+        "WS_PORT": "8765"
+      }
+    }
+  ]
+}
