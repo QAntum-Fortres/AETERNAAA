@@ -67,10 +67,11 @@ impl RealityManipulator {
 
     fn initialize_constants(&self) {
         // Speed of light
+        let c_id = Uuid::new_v4();
         self.fundamental_constants.insert(
-            Uuid::new_v4(),
+            c_id,
             FundamentalConstant {
-                id: Uuid::new_v4(),
+                id: c_id,
                 name: "Speed of Light".to_string(),
                 original_value: 299792458.0,
                 current_value: 299792458.0,
@@ -80,10 +81,11 @@ impl RealityManipulator {
         );
         
         // Planck constant
+        let h_id = Uuid::new_v4();
         self.fundamental_constants.insert(
-            Uuid::new_v4(),
+            h_id,
             FundamentalConstant {
-                id: Uuid::new_v4(),
+                id: h_id,
                 name: "Planck Constant".to_string(),
                 original_value: 6.62607015e-34,
                 current_value: 6.62607015e-34,
@@ -93,10 +95,11 @@ impl RealityManipulator {
         );
         
         // Gravitational constant
+        let g_id = Uuid::new_v4();
         self.fundamental_constants.insert(
-            Uuid::new_v4(),
+            g_id,
             FundamentalConstant {
-                id: Uuid::new_v4(),
+                id: g_id,
                 name: "Gravitational Constant".to_string(),
                 original_value: 6.67430e-11,
                 current_value: 6.67430e-11,

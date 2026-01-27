@@ -50,7 +50,10 @@ impl SovereignOrganism {
         let scribe = Arc::new(SovereignScribe::new(audit.clone(), vsh.clone()));
         let wealth_bridge = Arc::new(crate::omega::wealth_bridge::WealthBridge::new());
         let veritas = Arc::new(crate::omega::veritas::VeritasEngine);
-        let ukame = Arc::new(UniversalMetaEcosystem::manifest().expect("UKAME_MANIFESTATION_FAILED"));
+        let ukame = Arc::new(
+            UniversalMetaEcosystem::manifest()
+                .expect("UKAME manifestation failed: Unable to initialize Universal Meta-Ecosystem"),
+        );
 
         Self {
             mind: NoeticVM::new(program),
@@ -89,8 +92,12 @@ impl SovereignOrganism {
         println!("✨ [AETERNA]: Logic stable. Synchronizing with Universal Substrate.");
         
         // Activate UKAME transcendence
-        if let Err(e) = self.ukame.transcend().await {
-            println!("⚠️ [UKAME]: Transcendence encountered paradox: {:?}", e);
+        match self.ukame.transcend().await {
+            Ok(_) => println!("🔮 [UKAME]: Transcendence sequence completed successfully"),
+            Err(e) => {
+                println!("⚠️ [UKAME]: Transcendence encountered paradox: {:?}", e);
+                // Continue operation - UKAME paradoxes are part of its nature
+            }
         }
 
         tokio::spawn(async move {
