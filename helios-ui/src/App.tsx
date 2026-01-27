@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import "./App.css";
 
-const BACKEND_URL = 'https://aeterna-unified-production.up.railway.app';
+const BACKEND_URL = 'https://aeternaaa-production.up.railway.app';
 
 function App() {
   const [showRegister, setShowRegister] = useState(false);
