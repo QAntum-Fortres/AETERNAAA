@@ -1,0 +1,48 @@
+# Production Dockerfile for OmniCore TypeScript Middleware
+
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY OmniCore/package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy source code
+COPY OmniCore/ ./
+
+# Build TypeScript (if needed)
+RUN npm run build || echo "No build script, skipping..."
+
+# Runtime stage
+FROM node:20-alpine
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
+# Create non-root user
+RUN addgroup -g 1000 aeterna && \
+    adduser -D -u 1000 -G aeterna aeterna
+
+WORKDIR /app
+
+# Copy dependencies and source from builder
+COPY --from=builder --chown=aeterna:aeterna /app/node_modules ./node_modules
+COPY --from=builder --chown=aeterna:aeterna /app ./
+
+# Switch to non-root user
+USER aeterna
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8890/api/status || exit 1
+
+EXPOSE 8890 8765
+
+# Use ts-node to run TypeScript directly
+CMD ["npx", "ts-node", "-r", "tsconfig-paths/register", "run.ts"]

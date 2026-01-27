@@ -1,0 +1,77 @@
+# Production Dockerfile for AETERNA Rust Backend
+# Multi-stage build for optimal size and security
+
+FROM rust:1.80-slim as builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/aeterna
+
+# Copy dependency files first for better caching
+COPY Cargo.toml Cargo.lock ./
+COPY lwas_core/Cargo.toml ./lwas_core/
+COPY lwas_cli/Cargo.toml ./lwas_cli/
+COPY lwas_parser/Cargo.toml ./lwas_parser/
+COPY lwas_economy/Cargo.toml ./lwas_economy/
+
+# Create dummy source files to build dependencies
+RUN mkdir -p lwas_core/src lwas_cli/src lwas_parser/src lwas_economy/src && \
+    echo "fn main() {}" > lwas_cli/src/main.rs && \
+    echo "" > lwas_core/src/lib.rs && \
+    echo "" > lwas_parser/src/lib.rs && \
+    echo "" > lwas_economy/src/lib.rs
+
+# Build dependencies (cached layer)
+RUN cargo build --release -p lwas_cli || true
+
+# Copy actual source code
+COPY . .
+
+# Build the actual application
+RUN touch lwas_cli/src/main.rs lwas_core/src/lib.rs && \
+    cargo build --release -p lwas_cli
+
+# Runtime stage
+FROM debian:bookworm-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN useradd -m -u 1000 aeterna && \
+    mkdir -p /app /data && \
+    chown -R aeterna:aeterna /app /data
+
+WORKDIR /app
+
+# Copy binary from builder
+COPY --from=builder /usr/src/aeterna/target/release/lwas_cli /app/lwas_cli
+
+# Copy necessary assets
+COPY --chown=aeterna:aeterna AETERNA_ANIMA.soul /AETERNA_ANIMA.soul
+COPY --chown=aeterna:aeterna tokenizer.json /app/tokenizer.json
+
+# Create asset directories
+RUN mkdir -p /app/assets/micro_saas /data && \
+    chown -R aeterna:aeterna /app /data
+
+# Switch to non-root user
+USER aeterna
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8890/telemetry || exit 1
+
+EXPOSE 8890
+
+# Use exec form for proper signal handling
+CMD ["./lwas_cli", "ignite"]

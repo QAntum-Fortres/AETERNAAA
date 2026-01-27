@@ -45,6 +45,14 @@ export class SingularityServer {
     this.logger = Logger.getInstance();
     this.paymentGateway = new PaymentGateway();
 
+    // Configure payment gateway from environment variables
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (stripeKey && stripeWebhookSecret && !stripeKey.includes('PLACEHOLDER')) {
+      this.paymentGateway.configureStripe(stripeKey, stripeWebhookSecret);
+      this.logger.info('PAYMENT', 'Stripe payment gateway configured');
+    }
+
     this.setupMiddleware();
     this.setupRoutes();
     this.setupErrorHandling();
@@ -157,6 +165,21 @@ export class SingularityServer {
 
     this.app.get('/api/economy/stats', (req: any, res: any) => {
       res.json(this.paymentGateway.getStats());
+    });
+
+    // --- Stripe Webhook Endpoint ---
+    this.app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req: any, res: any) => {
+      try {
+        const signature = req.headers['stripe-signature'];
+        const payload = req.body.toString();
+        
+        await this.paymentGateway.handleWebhook('stripe', payload, signature);
+        
+        res.json({ received: true });
+      } catch (err: any) {
+        this.logger.error('WEBHOOK', 'Stripe webhook error', err);
+        res.status(400).json({ error: err.message });
+      }
     });
   }
 
