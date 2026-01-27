@@ -14,10 +14,10 @@ use crate::noetic_bridge::NoeticBridge;
 use crate::omega::audit::SovereignAudit;
 use crate::omega::global_assimilation::GlobalAssimilationMonitor;
 use crate::omega::noetic_engine::NoeticEngine;
-use crate::omega::reality_map::{FileNode, RealityMapper};
 use crate::omega::scribe::ScribeReport;
 use crate::omega::scribe::SovereignScribe;
 use crate::prelude::SovereignResult;
+use crate::ukame::core::UniversalMetaEcosystem;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -35,6 +35,7 @@ pub struct SovereignOrganism {
     pub vsh: Arc<VectorSpaceHeap>,
     pub wealth_bridge: Arc<crate::omega::wealth_bridge::WealthBridge>,
     pub veritas: Arc<crate::omega::veritas::VeritasEngine>,
+    pub ukame: Arc<UniversalMetaEcosystem>,
 }
 
 impl SovereignOrganism {
@@ -49,6 +50,7 @@ impl SovereignOrganism {
         let scribe = Arc::new(SovereignScribe::new(audit.clone(), vsh.clone()));
         let wealth_bridge = Arc::new(crate::omega::wealth_bridge::WealthBridge::new());
         let veritas = Arc::new(crate::omega::veritas::VeritasEngine);
+        let ukame = Arc::new(UniversalMetaEcosystem::manifest().expect("UKAME_MANIFESTATION_FAILED"));
 
         Self {
             mind: NoeticVM::new(program),
@@ -60,6 +62,7 @@ impl SovereignOrganism {
             vsh,
             wealth_bridge,
             veritas,
+            ukame,
         }
     }
 
@@ -84,6 +87,11 @@ impl SovereignOrganism {
         self.mind.run();
 
         println!("✨ [AETERNA]: Logic stable. Synchronizing with Universal Substrate.");
+        
+        // Activate UKAME transcendence
+        if let Err(e) = self.ukame.transcend().await {
+            println!("⚠️ [UKAME]: Transcendence encountered paradox: {:?}", e);
+        }
 
         tokio::spawn(async move {
             if let Err(e) = GlobalAssimilationMonitor::execute_global_overwrite().await {

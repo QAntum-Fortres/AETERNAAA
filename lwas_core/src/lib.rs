@@ -13,7 +13,9 @@ pub mod prelude;
 pub mod runtime;
 pub mod security;
 pub mod telemetry;
+pub mod ukame;
 
 // Експлицитен суверенитет: Никакви glob imports (*) тук!
 pub use crate::memory::vsh::{VectorSpaceHeap, VshEngine, VshVector};
 pub use crate::prelude::{SovereignError, SovereignResult};
+pub use crate::ukame::core::UniversalMetaEcosystem;
