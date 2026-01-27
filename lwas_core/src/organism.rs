@@ -50,10 +50,10 @@ impl SovereignOrganism {
         let scribe = Arc::new(SovereignScribe::new(audit.clone(), vsh.clone()));
         let wealth_bridge = Arc::new(crate::omega::wealth_bridge::WealthBridge::new());
         let veritas = Arc::new(crate::omega::veritas::VeritasEngine);
-        let ukame = Arc::new(
-            UniversalMetaEcosystem::manifest()
-                .expect("UKAME manifestation failed: Unable to initialize Universal Meta-Ecosystem"),
-        );
+        let ukame =
+            Arc::new(UniversalMetaEcosystem::manifest().expect(
+                "UKAME manifestation failed: Unable to initialize Universal Meta-Ecosystem",
+            ));
 
         Self {
             mind: NoeticVM::new(program),
@@ -71,7 +71,7 @@ impl SovereignOrganism {
 
     pub async fn perform_self_audit(&self) -> SovereignResult<usize> {
         let mut audit = self.audit.write().await;
-        let project_path = PathBuf::from("C:\\RUST-LANGUAGE\\QANTUM-JULES");
+        let project_path = PathBuf::from(".");
         audit.run_full_audit(vec![project_path]).await?;
         Ok(audit.findings.len())
     }
@@ -90,7 +90,7 @@ impl SovereignOrganism {
         self.mind.run();
 
         println!("✨ [AETERNA]: Logic stable. Synchronizing with Universal Substrate.");
-        
+
         // Activate UKAME transcendence
         match self.ukame.transcend().await {
             Ok(_) => println!("🔮 [UKAME]: Transcendence sequence completed successfully"),

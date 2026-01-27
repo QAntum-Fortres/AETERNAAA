@@ -37,7 +37,7 @@ impl SovereignScribe {
             .map_err(|e| e.to_string())?;
 
         // КЛЪСТЕР ЗА ГЕНЕРИРАНЕ НА АКТИВИ (Реално отчитане чрез Wealth Bridge)
-        let asset_count = std::fs::read_dir("C:\\RUST-LANGUAGE\\QANTUM-JULES\\assets\\micro_saas")
+        let asset_count = std::fs::read_dir("assets/micro_saas")
             .map(|entries| entries.filter_map(|e| e.ok()).count())
             .unwrap_or(0);
 
