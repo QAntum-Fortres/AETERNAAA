@@ -25,6 +25,10 @@ import { ProductCatalog, PRODUCTS } from './economy/Products';
 import { SaaSAPI } from './api/SaaSAPI';
 import { VortexSystem } from './vortex/VortexSystem';
 import { AutoModules } from './auto/AutoModules';
+import { HealthScoreCalculator } from './healing/HealthScoreCalculator';
+import { AutoRepairEngine } from './healing/AutoRepairEngine';
+import { AdaptiveRetrySystem } from './healing/AdaptiveRetrySystem';
+import { ClientManager } from './client/ClientManager';
 import * as path from 'path';
 
 /**
@@ -52,6 +56,10 @@ export class SingularityServer {
     this.saasAPI = new SaaSAPI();
     this.vortexSystem = new VortexSystem();
     this.autoModules = new AutoModules();
+    this.healthCalculator = new HealthScoreCalculator();
+    this.autoRepair = new AutoRepairEngine();
+    this.retrySystem = new AdaptiveRetrySystem();
+    this.clientManager = new ClientManager();
 
     // Configure payment gateway from environment variables
     const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -184,6 +192,95 @@ export class SingularityServer {
       } catch (error: any) {
         res.status(500).json({ error: error.message });
       }
+    });
+
+    // --- Self-Healing System API ---
+    this.app.get('/api/health/platform', (req, res) => {
+      const platformHealth = this.healthCalculator.getCurrentPlatformHealth();
+      res.json(platformHealth);
+    });
+
+    this.app.get('/api/health/component/:id', (req, res) => {
+      const componentHealth = this.healthCalculator.getComponentHealth(req.params.id);
+      if (!componentHealth) {
+        return res.status(404).json({ error: 'Component not found' });
+      }
+      res.json(componentHealth);
+    });
+
+    this.app.post('/api/repair/:componentType', async (req, res) => {
+      try {
+        const result = await this.autoRepair.forceRepair(req.params.componentType);
+        res.json(result);
+      } catch (error: any) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    this.app.get('/api/repair/history', (req, res) => {
+      res.json({
+        repairs: this.autoRepair.getRepairHistory(),
+        snapshots: this.autoRepair.getSystemSnapshots()
+      });
+    });
+
+    this.app.post('/api/repair/rollback/:snapshotIndex?', async (req, res) => {
+      try {
+        const snapshotIndex = parseInt(req.params.snapshotIndex || '0');
+        const result = await this.autoRepair.rollbackToSnapshot(snapshotIndex);
+        res.json(result);
+      } catch (error: any) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    // --- Client Management API ---
+    this.app.post('/api/client/register', async (req, res) => {
+      try {
+        const { email, name, password } = req.body;
+        const client = await this.clientManager.registerClient(email, name, password);
+        res.json({ success: true, client });
+      } catch (error: any) {
+        res.status(400).json({ error: error.message });
+      }
+    });
+
+    this.app.post('/api/client/login', async (req, res) => {
+      try {
+        const { email, password } = req.body;
+        const client = await this.clientManager.authenticateClient(email, password, req.ip, req.get('User-Agent') || '');
+        res.json({ success: true, client });
+      } catch (error: any) {
+        res.status(401).json({ error: error.message });
+      }
+    });
+
+    this.app.get('/api/client/:clientId/apps', (req, res) => {
+      try {
+        const apps = this.clientManager.getClientApps(req.params.clientId);
+        res.json({ apps });
+      } catch (error: any) {
+        res.status(404).json({ error: error.message });
+      }
+    });
+
+    this.app.post('/api/client/:clientId/purchase', async (req, res) => {
+      try {
+        const { planId, paymentMethodId } = req.body;
+        const subscription = await this.clientManager.purchaseSubscription(
+          req.params.clientId, 
+          planId, 
+          paymentMethodId
+        );
+        res.json({ success: true, subscription });
+      } catch (error: any) {
+        res.status(400).json({ error: error.message });
+      }
+    });
+
+    this.app.get('/api/client/stats', (req, res) => {
+      const stats = this.clientManager.getClientStats();
+      res.json(stats);
     });
 
     // --- Static Files ---
