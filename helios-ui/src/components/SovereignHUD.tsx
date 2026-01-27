@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import {
     Home, MessageSquare, Terminal as TerminalIcon, GitBranch, Cpu, Zap, Shield, Atom, Dna, Globe,
     Menu, X, Search, Bell, Settings, Send, 
-    Trash, Link as LinkIcon, User, Activity, ShoppingBag
+    Trash, Link as LinkIcon, User, Activity, ShoppingBag, DollarSign
 } from 'lucide-react';
 import { useSovereignStore } from '../core/socket/NativeWebSocket';
 import { useSovereignAPI } from '../hooks/useSovereignAPI';
@@ -12,6 +12,7 @@ import { listen } from '@tauri-apps/api/event';
 import { MetricsChart } from './MetricsChart';
 import { NeuralMeshCanvas } from './NeuralMeshCanvas';
 import { GlobalState } from '../types/sovereign';
+import MoneyDashboard from './MoneyDashboard';
 
 // --- SUBCOMPONENTS ---
 
@@ -53,7 +54,7 @@ const StatCard = ({ label, value, color }: { label: string, value: string, color
 
 // --- MAIN COMPONENT ---
 
-type Page = 'dashboard' | 'chat' | 'terminal' | 'skilltree' | 'market' | 'intelligence' | 'omega' | 'physics' | 'fortress' | 'biology' | 'guardians' | 'reality' | 'chemistry';
+type Page = 'dashboard' | 'chat' | 'terminal' | 'skilltree' | 'market' | 'intelligence' | 'omega' | 'physics' | 'fortress' | 'biology' | 'guardians' | 'reality' | 'chemistry' | 'money';
 
 interface Message {
     id: string;
@@ -195,6 +196,7 @@ export const SovereignHUD = () => {
                         <NavItem icon={MessageSquare} label="Chat AI" active={activePage === 'chat'} onClick={() => setActivePage('chat')} />
                         <NavItem icon={TerminalIcon} label="Terminal" active={activePage === 'terminal'} onClick={() => setActivePage('terminal')} />
                         <NavItem icon={ShoppingBag} label="Market" active={activePage === 'market'} onClick={() => setActivePage('market')} color="--neon-gold" />
+                        <NavItem icon={DollarSign} label="Money" active={activePage === 'money'} onClick={() => setActivePage('money')} color="--neon-green" />
                         <NavItem icon={GitBranch} label="Skill Tree" active={activePage === 'skilltree'} onClick={() => setActivePage('skilltree')} />
                     </div>
                     <div className="space-y-1">
@@ -349,6 +351,12 @@ export const SovereignHUD = () => {
                                         </div>
                                     </div>
                                 </div>
+                            </motion.div>
+                        )}
+
+                        {activePage === 'money' && (
+                            <motion.div key="money" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full overflow-auto">
+                                <MoneyDashboard />
                             </motion.div>
                         )}
                     </AnimatePresence>
