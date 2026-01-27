@@ -1,7 +1,7 @@
 # Production Dockerfile for AETERNA Rust Backend
 # Multi-stage build for optimal size and security
 
-FROM rust:1.80-slim as builder
+FROM rust:1.84-slim as builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
