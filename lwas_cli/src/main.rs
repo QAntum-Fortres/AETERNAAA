@@ -61,28 +61,20 @@ struct TelemetryResponse {
 }
 
 struct AppState {
-    organism: Mutex<SovereignOrganism>,
+    organism: Mutex<Option<SovereignOrganism>>,
+    ready: std::sync::atomic::AtomicBool,
 }
 
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().ok();
-    let soul_path = "../AETERNA_ANIMA.soul";
-
+    
     println!("🌌 [AETERNA LOGOS: SINGULARITY EVENT]");
 
-    let soul_content = match fs::read_to_string(soul_path) {
-        Ok(content) => content,
-        Err(_) => {
-            println!("🚨 [ERROR]: AETERNA_ANIMA.soul NOT FOUND.");
-            return;
-        }
-    };
-
-    let organism = SovereignOrganism::manifest(&soul_content);
-
+    // Create shared state with empty organism initially
     let shared_state = Arc::new(AppState {
-        organism: Mutex::new(organism),
+        organism: Mutex::new(None),
+        ready: std::sync::atomic::AtomicBool::new(false),
     });
 
     let app = Router::new()
@@ -95,6 +87,7 @@ async fn main() {
         .layer(CorsLayer::permissive())
         .with_state(shared_state.clone());
 
+    // Start HTTP server IMMEDIATELY for healthcheck
     tokio::spawn(async move {
         let listener = tokio::net::TcpListener::bind("0.0.0.0:8890")
             .await
@@ -103,10 +96,33 @@ async fn main() {
         axum::serve(listener, app).await.unwrap();
     });
 
+    // Give server time to start
+    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+
+    // Now initialize organism in background
+    let soul_path = "../AETERNA_ANIMA.soul";
+    let soul_content = match fs::read_to_string(soul_path) {
+        Ok(content) => content,
+        Err(_) => {
+            println!("🚨 [ERROR]: AETERNA_ANIMA.soul NOT FOUND. Using default.");
+            "SOUL_ID: DEFAULT\nNAME: AETERNA".to_string()
+        }
+    };
+
+    let organism = SovereignOrganism::manifest(&soul_content);
+    
     {
-        let mut org = shared_state.organism.lock().await;
-        if let Err(e) = org.ignite().await {
-            println!("🚨 [FATAL]: Unification Collapse: {}", e);
+        let mut org_lock = shared_state.organism.lock().await;
+        *org_lock = Some(organism);
+        shared_state.ready.store(true, std::sync::atomic::Ordering::SeqCst);
+    }
+
+    {
+        let mut org_lock = shared_state.organism.lock().await;
+        if let Some(ref mut org) = *org_lock {
+            if let Err(e) = org.ignite().await {
+                println!("🚨 [FATAL]: Unification Collapse: {}", e);
+            }
         }
     }
 
@@ -116,54 +132,71 @@ async fn main() {
 }
 
 async fn handle_telemetry(State(state): State<Arc<AppState>>) -> Json<TelemetryResponse> {
-    let mut org = state.organism.lock().await;
-    let stats = org.telemetry.capture();
-    let (bridge_connected, mrr) = org.wealth_bridge.get_status();
+    let mut org_lock = state.organism.lock().await;
+    
+    if let Some(ref mut org) = *org_lock {
+        let stats = org.telemetry.capture();
+        let (bridge_connected, mrr) = org.wealth_bridge.get_status();
 
-    // Fetch crypto assets if bridge is connected
-    let crypto_assets = if bridge_connected {
-        org.wealth_bridge
-            .fetch_crypto_assets()
-            .await
-            .unwrap_or_default()
-    } else {
-        vec![]
-    };
-
-    let mut total_liquid_usd = 0.0;
-    for asset in &crypto_assets {
-        let amount =
-            asset.free.parse::<f64>().unwrap_or(0.0) + asset.locked.parse::<f64>().unwrap_or(0.0);
-        if asset.asset == "USDT" || asset.asset == "USDC" {
-            total_liquid_usd += amount;
+        // Fetch crypto assets if bridge is connected
+        let crypto_assets = if bridge_connected {
+            org.wealth_bridge
+                .fetch_crypto_assets()
+                .await
+                .unwrap_or_default()
         } else {
-            // Fetch live price for other assets (e.g. SOLUSDT)
-            let symbol = format!("{}USDT", asset.asset);
-            if let Ok(price) = org.wealth_bridge.get_ticker_price(&symbol).await {
-                total_liquid_usd += amount * price;
-            } else {
-                // Fallback to 1.0 if ticker fails (safety)
+            vec![]
+        };
+
+        let mut total_liquid_usd = 0.0;
+        for asset in &crypto_assets {
+            let amount =
+                asset.free.parse::<f64>().unwrap_or(0.0) + asset.locked.parse::<f64>().unwrap_or(0.0);
+            if asset.asset == "USDT" || asset.asset == "USDC" {
                 total_liquid_usd += amount;
+            } else {
+                // Fetch live price for other assets (e.g. SOLUSDT)
+                let symbol = format!("{}USDT", asset.asset);
+                if let Ok(price) = org.wealth_bridge.get_ticker_price(&symbol).await {
+                    total_liquid_usd += amount * price;
+                } else {
+                    // Fallback to 1.0 if ticker fails (safety)
+                    total_liquid_usd += amount;
+                }
             }
         }
-    }
 
-    Json(TelemetryResponse {
-        cpu: format!("{:.1}%", stats.cpu_usage),
-        ram: format!("{:.2} / {:.2} GB", stats.ram_used_gb, stats.ram_total_gb),
-        resonance: "0x4121".to_string(),
-        entropy: format!("{:.4}", stats.entropy),
-        status: if stats.cpu_usage < 90.0 {
-            "SUPREME".into()
-        } else {
-            "THROTTLED".into()
-        },
-        bridge_connected,
-        mrr_eur: mrr,
-        crypto_assets,
-        total_liquid_usd,
-        realized_revenue: lwas_core::omega::realization::RealizationEngine::get_total_revenue(),
-    })
+        Json(TelemetryResponse {
+            cpu: format!("{:.1}%", stats.cpu_usage),
+            ram: format!("{:.2} / {:.2} GB", stats.ram_used_gb, stats.ram_total_gb),
+            resonance: "0x4121".to_string(),
+            entropy: format!("{:.4}", stats.entropy),
+            status: if stats.cpu_usage < 90.0 {
+                "SUPREME".into()
+            } else {
+                "THROTTLED".into()
+            },
+            bridge_connected,
+            mrr_eur: mrr,
+            crypto_assets,
+            total_liquid_usd,
+            realized_revenue: lwas_core::omega::realization::RealizationEngine::get_total_revenue(),
+        })
+    } else {
+        // Organism not ready yet
+        Json(TelemetryResponse {
+            cpu: "0.0%".to_string(),
+            ram: "0.0 / 0.0 GB".to_string(),
+            resonance: "INITIALIZING".to_string(),
+            entropy: "0.0".to_string(),
+            status: "INITIALIZING".to_string(),
+            bridge_connected: false,
+            mrr_eur: 0.0,
+            crypto_assets: vec![],
+            total_liquid_usd: 0.0,
+            realized_revenue: 0.0,
+        })
+    }
 }
 
 async fn handle_reality_map(State(state): State<Arc<AppState>>) -> Json<RealityMapResponse> {
@@ -186,7 +219,22 @@ async fn handle_command(
     State(state): State<Arc<AppState>>,
     Json(payload): Json<CommandRequest>,
 ) -> (StatusCode, Json<CommandResponse>) {
-    let mut org = state.organism.lock().await;
+    let mut org_lock = state.organism.lock().await;
+    
+    // Check if organism is ready
+    let org = match org_lock.as_mut() {
+        Some(o) => o,
+        None => {
+            return (
+                StatusCode::SERVICE_UNAVAILABLE,
+                Json(CommandResponse {
+                    response: "AETERNA: Organism is still initializing. Please wait.".to_string(),
+                    status: "INITIALIZING".into(),
+                }),
+            );
+        }
+    };
+    
     let command = payload.command.to_lowercase();
 
     let response_text = if command.contains("status") || command.contains("check_status") {
