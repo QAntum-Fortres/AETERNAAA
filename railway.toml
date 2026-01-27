@@ -1,0 +1,20 @@
+# Railway.app Production Deployment Configuration
+# Multi-service setup for AETERNAAA
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.backend"
+
+[deploy]
+startCommand = "./lwas_cli ignite"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+# Environment variables (set in Railway dashboard)
+# Required:
+# - STRIPE_SECRET_KEY
+# - STRIPE_WEBHOOK_SECRET
+# - EXCHANGE_API_KEY
+# - EXCHANGE_SECRET_KEY
+# - PORT=8890
+# - RUST_LOG=info
