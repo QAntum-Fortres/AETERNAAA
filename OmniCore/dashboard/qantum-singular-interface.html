@@ -193,7 +193,7 @@
                     <li>Basic Wealth Bridge API</li>
                     <li>Community Support</li>
                 </ul>
-                <button class="btn" onclick="subscribe('stripe', 29, 'NODE_ACCESS')">Initialize Node</button>
+                <button class="btn" onclick="subscribe('stripe', 'node_access')">Initialize Node</button>
             </div>
 
             <!-- Sovereign Empire -->
@@ -207,7 +207,7 @@
                     <li>Direct Architect Support (High Res)</li>
                     <li>White-label Helios Interface</li>
                 </ul>
-                <button class="btn secondary" onclick="subscribe('paypal', 99, 'SOVEREIGN_EMPIRE')">Establish Empire</button>
+                <button class="btn secondary" onclick="subscribe('stripe', 'sovereign_empire')">Establish Empire</button>
             </div>
 
             <!-- Galactic Core -->
@@ -221,7 +221,7 @@
                     <li>Full Sovereign Encryption Vault</li>
                     <li>Dedicated Metal Hardware Access</li>
                 </ul>
-                <button class="btn" onclick="subscribe('stripe', 499, 'GALACTIC_CORE')">Ignite Core</button>
+                <button class="btn" onclick="subscribe('stripe', 'galactic_core')">Ignite Core</button>
             </div>
         </div>
 
@@ -232,36 +232,77 @@
     </div>
 
     <script>
-        async function subscribe(provider, amount, plan) {
-            console.log(`Initiating ${plan} subscription via ${provider} for €${amount}`);
+        // Load products on page load
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const data = await response.json();
+                
+                if (data.products && data.products.length > 0) {
+                    console.log('[AETERNA] Products loaded:', data.products);
+                }
+            } catch (error) {
+                console.error('[AETERNA] Failed to load products:', error);
+            }
+        }
+
+        async function subscribe(provider, productId) {
+            console.log(`Initiating subscription for product: ${productId} via ${provider}`);
             
             try {
-                const response = await fetch('/api/economy/pay', {
+                // Get product details
+                const productResponse = await fetch(`/api/products/${productId}`);
+                if (!productResponse.ok) {
+                    throw new Error('Product not found');
+                }
+                const product = await productResponse.json();
+                
+                // Create checkout session
+                const checkoutResponse = await fetch('/api/economy/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        amount,
-                        provider,
-                        metadata: {
-                            plan,
-                            timestamp: Date.now().toString()
-                        }
+                        productId: productId,
+                        successUrl: window.location.origin + '/success',
+                        cancelUrl: window.location.origin + '/cancel'
                     })
                 });
 
-                const data = await response.json();
+                const checkout = await checkoutResponse.json();
                 
-                if (data.id) {
-                    alert(`[AETERNA]: Payment bridge established. ID: ${data.id}\nStatus: ${data.status}\n\nRedirecting to ${provider} gateway...`);
-                    // In a real scenario, we would redirect to data.checkoutUrl or popup a modal
+                if (checkout.checkoutUrl) {
+                    // Redirect to Stripe checkout
+                    window.location.href = checkout.checkoutUrl;
                 } else {
-                    alert('[ERROR]: Failed to connect to Wealth Bridge.');
+                    // Fallback to direct payment
+                    const paymentResponse = await fetch('/api/economy/pay', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            productId: productId,
+                            provider: provider || 'stripe',
+                            metadata: {
+                                timestamp: Date.now().toString()
+                            }
+                        })
+                    });
+
+                    const payment = await paymentResponse.json();
+                    
+                    if (payment.id) {
+                        alert(`[AETERNA]: Payment bridge established.\nProduct: ${product.name}\nAmount: ${product.formattedPrice}\nID: ${payment.id}`);
+                    } else {
+                        alert('[ERROR]: Failed to connect to Wealth Bridge.');
+                    }
                 }
             } catch (error) {
-                console.error('Payment error:', error);
-                alert('[CRITICAL_ERROR]: Noetic Resonance failed.');
+                console.error('[AETERNA] Payment error:', error);
+                alert('[ERROR]: ' + error.message);
             }
         }
+
+        // Load products when page loads
+        loadProducts();
     </script>
 </body>
 </html>
