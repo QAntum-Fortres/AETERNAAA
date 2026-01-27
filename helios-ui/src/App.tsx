@@ -1,10 +1,46 @@
 import { useState } from 'react';
 import "./App.css";
 
+const BACKEND_URL = 'https://aeterna-unified-production.up.railway.app';
+
 function App() {
   const [showRegister, setShowRegister] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [registered, setRegistered] = useState(false);
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage('');
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMessage('✅ Registration successful! Welcome to AETERNA.');
+        setRegistered(true);
+        console.log('Registration success:', data);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        setMessage(`❌ Registration failed: ${errorData.error || response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      setMessage('❌ Connection error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
@@ -93,38 +129,54 @@ function App() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); alert('Registration flow activated!'); }} className="space-y-4">
-                <h3 className="text-2xl font-bold mb-6">Create Account</h3>
+              <form onSubmit={handleRegister} className="space-y-4">
+                <h3 className="text-2xl font-bold mb-6">
+                  {registered ? '🎉 Welcome!' : 'Create Account'}
+                </h3>
                 
-                <input 
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white placeholder-gray-400"
-                />
-                
-                <input 
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white placeholder-gray-400"
-                />
+                {message && (
+                  <div className={`p-3 rounded ${message.includes('✅') ? 'bg-green-600/20 text-green-400' : 'bg-red-600/20 text-red-400'}`}>
+                    {message}
+                  </div>
+                )}
 
-                <button 
-                  type="submit"
-                  className="w-full bg-green-600 hover:bg-green-700 py-2 rounded-lg font-bold transition"
-                >
-                  Complete Registration
-                </button>
+                {!registered && (
+                  <>
+                    <input 
+                      type="email"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white placeholder-gray-400"
+                    />
+                    
+                    <input 
+                      type="password"
+                      placeholder="Password (min 6 characters)"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      className="w-full bg-gray-700 border border-gray-600 rounded px-4 py-2 text-white placeholder-gray-400"
+                    />
+
+                    <button 
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-green-600 hover:bg-green-700 py-2 rounded-lg font-bold transition disabled:opacity-50"
+                    >
+                      {loading ? 'Registering...' : 'Complete Registration'}
+                    </button>
+                  </>
+                )}
 
                 <button 
                   type="button"
-                  onClick={() => setShowRegister(false)}
+                  onClick={() => { setShowRegister(false); setMessage(''); setRegistered(false); }}
                   className="w-full text-gray-400 hover:text-white py-2"
                 >
-                  Back
+                  {registered ? 'Continue to Dashboard' : 'Back'}
                 </button>
               </form>
             )}
