@@ -14,6 +14,7 @@ import { NeuralMeshCanvas } from './NeuralMeshCanvas';
 import { GlobalState } from '../types/sovereign';
 import MoneyDashboard from './MoneyDashboard';
 import MainSaaSPlatform from './MainSaaSPlatform';
+import AntigravityDashboard from './AntigravityDashboard';
 
 // --- SUBCOMPONENTS ---
 
@@ -199,6 +200,7 @@ export const SovereignHUD = () => {
                         <NavItem icon={ShoppingBag} label="Market" active={activePage === 'market'} onClick={() => setActivePage('market')} color="--neon-gold" />
                         <NavItem icon={DollarSign} label="Money" active={activePage === 'money'} onClick={() => setActivePage('money')} color="--neon-green" />
                         <NavItem icon={Globe} label="SaaS Hub" active={activePage === 'saas'} onClick={() => setActivePage('saas')} color="--neon-cyan" />
+                        <NavItem icon={Activity} label="Network Map" active={activePage === 'network'} onClick={() => setActivePage('network')} color="--neon-purple" />
                         <NavItem icon={GitBranch} label="Skill Tree" active={activePage === 'skilltree'} onClick={() => setActivePage('skilltree')} />
                     </div>
                     <div className="space-y-1">
@@ -365,6 +367,12 @@ export const SovereignHUD = () => {
                         {activePage === 'saas' && (
                             <motion.div key="saas" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full overflow-auto">
                                 <MainSaaSPlatform />
+                            </motion.div>
+                        )}
+
+                        {activePage === 'network' && (
+                            <motion.div key="network" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full">
+                                <AntigravityDashboard />
                             </motion.div>
                         )}
                     </AnimatePresence>
