@@ -23,6 +23,8 @@ import { Logger } from './telemetry/Logger';
 import { PaymentGateway } from './economy/PaymentGateway';
 import { ProductCatalog, PRODUCTS } from './economy/Products';
 import { SaaSAPI } from './api/SaaSAPI';
+import { VortexSystem } from './vortex/VortexSystem';
+import { AutoModules } from './auto/AutoModules';
 import * as path from 'path';
 
 /**
@@ -48,6 +50,8 @@ export class SingularityServer {
     this.logger = Logger.getInstance();
     this.paymentGateway = new PaymentGateway();
     this.saasAPI = new SaaSAPI();
+    this.vortexSystem = new VortexSystem();
+    this.autoModules = new AutoModules();
 
     // Configure payment gateway from environment variables
     const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -150,6 +154,37 @@ export class SingularityServer {
 
     // --- SaaS Platform API ---
     this.app.use('/api', this.saasAPI.getRouter());
+
+    // --- VORTEX System API ---
+    this.app.get('/api/vortex/status', (req, res) => {
+      res.json(this.vortexSystem.getSystemStatus());
+    });
+
+    this.app.get('/api/vortex/modules', (req, res) => {
+      res.json({
+        vortex_modules: this.vortexSystem.getAllModules(),
+        auto_modules: this.autoModules.getAllModules()
+      });
+    });
+
+    this.app.post('/api/vortex/collect', async (req, res) => {
+      try {
+        const { target_path } = req.body;
+        const result = await this.vortexSystem.performCodeCollection(target_path || './');
+        res.json(result);
+      } catch (error: any) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    this.app.post('/api/auto/execute/:moduleId', async (req, res) => {
+      try {
+        await this.autoModules.forceExecuteModule(req.params.moduleId);
+        res.json({ success: true, message: 'Module executed successfully' });
+      } catch (error: any) {
+        res.status(500).json({ error: error.message });
+      }
+    });
 
     // --- Static Files ---
     const dashboardDir = path.join(process.cwd(), 'dashboard');
