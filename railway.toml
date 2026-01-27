@@ -4,9 +4,14 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile.backend"
+buildEnvironment = "V3"
 
 [deploy]
+runtime = "V2"
+numReplicas = 1
 startCommand = "./lwas_cli ignite"
+sleepApplication = false
+useLegacyStacker = false
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
 
