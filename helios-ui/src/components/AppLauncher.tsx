@@ -1,4 +1,4 @@
-/**
+﻿/**
  * App Launcher - Individual SaaS Application Interface
  * Provides seamless access to each SaaS application with unified branding
  */
@@ -24,7 +24,7 @@ interface SaaSAppDetails {
 }
 
 export const AppLauncher: React.FC<{ appId: string }> = ({ appId }) => {
-    const [language, setLanguage] = useState<'bg' | 'en'>('bg');
+    const [language, setLanguage] = useState<'bg' | 'en'>('en');
     const [appDetails, setAppDetails] = useState<SaaSAppDetails | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 

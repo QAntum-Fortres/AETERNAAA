@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Internationalization for AETERNA.WEBSITE
  * Bulgarian + English support
  */
@@ -218,7 +218,7 @@ export const translations: Record<'bg' | 'en', Translation> = {
   }
 };
 
-export const useTranslation = (language: 'bg' | 'en' = 'bg') => {
+export const useTranslation = (language: 'bg' | 'en' = 'en') => {
   return {
     t: (key: keyof Translation): string => {
       return translations[language][key] || key;
@@ -232,5 +232,5 @@ export const useTranslation = (language: 'bg' | 'en' = 'bg') => {
 };
 
 export const getCurrentLanguage = (): 'bg' | 'en' => {
-  return (localStorage.getItem('aeterna_language') as 'bg' | 'en') || 'bg';
+  return (localStorage.getItem('aeterna_language') as 'bg' | 'en') || 'en';
 };

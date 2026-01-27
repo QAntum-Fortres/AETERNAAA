@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Client Portal - Complete user experience
  * Registration → Payment → Dashboard → SaaS Usage
  */
@@ -37,12 +37,12 @@ const PRICING_PLANS: PricingPlan[] = [
     name: 'Node Access',
     price: 29,
     currency: 'EUR',
-    interval: 'месец',
+    interval: 'month',
     features: [
-      'Достъп до 1 SaaS приложение',
+      'Access to 1 SaaS application',
       'Basic neural node access',
-      'API достъп (1000 req/day)',
-      'Community поддръжка',
+      'API access (1000 req/day)',
+      'Community support',
       'Basic telemetry dashboard'
     ],
     apps: ['wealth_scanner']
@@ -52,13 +52,13 @@ const PRICING_PLANS: PricingPlan[] = [
     name: 'Sovereign Empire', 
     price: 99,
     currency: 'EUR',
-    interval: 'месец',
+    interval: 'month',
     popular: true,
     features: [
-      'Достъп до 2 SaaS приложения',
+      'Access to 2 SaaS applications',
       'Advanced neural network access',
-      'API достъп (10,000 req/day)',
-      'Priority поддръжка',
+      'API access (10,000 req/day)',
+      'Priority support',
       'Cross-app data sharing',
       'Custom integrations'
     ],
@@ -69,14 +69,14 @@ const PRICING_PLANS: PricingPlan[] = [
     name: 'Galactic Core',
     price: 499,
     currency: 'EUR', 
-    interval: 'месец',
+    interval: 'month',
     features: [
-      'Достъп до всички 6 SaaS приложения',
+      'Access to all 6 SaaS applications',
       'Unlimited neural network access',
-      'Unlimited API достъп',
-      '24/7 dedicated поддръжка',
+      'Unlimited API access',
+      '24/7 dedicated support',
       'AI model training',
-      'White-label опции',
+      'White-label options',
       'Telegram mobile control (967408)',
       'Quantum features access'
     ],
@@ -93,7 +93,7 @@ export const ClientPortal: React.FC = () => {
     isLoggedIn: false
   });
   const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
-  const [language, setLanguage] = useState<'bg' | 'en'>('bg');
+  const [language, setLanguage] = useState<'bg' | 'en'>('en');
 
   // Check if user is already logged in
   useEffect(() => {
@@ -257,7 +257,7 @@ export const ClientPortal: React.FC = () => {
 
 // Landing Page Component
 const LandingPage: React.FC<{
-  language: 'bg' | 'en';
+  language: 'en' | 'en';
   onGetStarted: () => void;
   onLogin: () => void;
   onSelectPlan: (plan: PricingPlan) => void;
@@ -386,7 +386,7 @@ const LandingPage: React.FC<{
 
 // Registration Page
 const RegistrationPage: React.FC<{
-  language: 'bg' | 'en';
+  language: 'en' | 'en';
   selectedPlan: PricingPlan | null;
   onRegister: (email: string, name: string, password: string) => void;
   onBack: () => void;
@@ -514,7 +514,7 @@ const RegistrationPage: React.FC<{
 
 // Login Page
 const LoginPage: React.FC<{
-  language: 'bg' | 'en';
+  language: 'en' | 'en';
   onLogin: (email: string, password: string) => void;
   onBack: () => void;
 }> = ({ language, onLogin, onBack }) => {
@@ -615,7 +615,7 @@ const LoginPage: React.FC<{
 
 // Payment Page
 const PaymentPage: React.FC<{
-  language: 'bg' | 'en';
+  language: 'en' | 'en';
   plans: PricingPlan[];
   selectedPlan: PricingPlan | null;
   onSelectPlan: (plan: PricingPlan) => void;
@@ -719,7 +719,7 @@ const PaymentPage: React.FC<{
 
 // Client Dashboard  
 const ClientDashboard: React.FC<{
-  language: 'bg' | 'en';
+  language: 'en' | 'en';
   user: UserData;
   onLogout: () => void;
   onLaunchApp: (appId: string) => void;

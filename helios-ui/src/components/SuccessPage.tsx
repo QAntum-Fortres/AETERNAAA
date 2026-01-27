@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Success Page - Post-payment confirmation
  * Shows client their purchased SaaS applications and next steps
  */
@@ -70,7 +70,7 @@ const AVAILABLE_APPS: SaaSApp[] = [
 ];
 
 export const SuccessPage: React.FC = () => {
-    const [language, setLanguage] = useState<'bg' | 'en'>('bg');
+    const [language, setLanguage] = useState<'bg' | 'en'>('en');
     const [purchasedPlan, setPurchasedPlan] = useState<PurchasedPlan | null>(null);
     const [clientApps, setClientApps] = useState<SaaSApp[]>([]);
     const [isLoading, setIsLoading] = useState(true);
