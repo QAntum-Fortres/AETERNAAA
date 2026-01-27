@@ -5,18 +5,34 @@ use axum::{
     routing::{get, post},
     Router,
 };
+use chrono;
 use lwas_core::organism::SovereignOrganism;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use tower_http::cors::CorsLayer;
+use uuid;
 
 use lwas_core::omega::reality_map::{FileNode, RealityMapper};
 
 #[derive(Deserialize)]
 struct CommandRequest {
     command: String,
+}
+
+#[derive(Deserialize)]
+struct RegisterRequest {
+    email: String,
+    password: String,
+}
+
+#[derive(Serialize)]
+struct AuthResponse {
+    success: bool,
+    message: String,
+    token: Option<String>,
+    user_id: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -73,6 +89,9 @@ async fn main() {
         .route("/command", post(handle_command))
         .route("/telemetry", get(handle_telemetry))
         .route("/reality-map", get(handle_reality_map))
+        .route("/api/auth/register", post(handle_register))
+        .route("/api/auth/login", post(handle_login))
+        .route("/health", get(handle_health))
         .layer(CorsLayer::permissive())
         .with_state(shared_state.clone());
 
@@ -267,6 +286,94 @@ async fn handle_command(
         Json(CommandResponse {
             response: response_text,
             status: "SUCCESS".into(),
+        }),
+    )
+}
+
+// Health check endpoint
+async fn handle_health() -> Json<serde_json::Value> {
+    Json(serde_json::json!({
+        "status": "healthy",
+        "service": "AETERNA Backend",
+        "version": "1.0.0-SINGULARITY"
+    }))
+}
+
+// User registration endpoint
+async fn handle_register(
+    Json(payload): Json<RegisterRequest>,
+) -> (StatusCode, Json<AuthResponse>) {
+    // Validate input
+    if payload.email.is_empty() || !payload.email.contains('@') {
+        return (
+            StatusCode::BAD_REQUEST,
+            Json(AuthResponse {
+                success: false,
+                message: "Invalid email address".to_string(),
+                token: None,
+                user_id: None,
+            }),
+        );
+    }
+
+    if payload.password.len() < 6 {
+        return (
+            StatusCode::BAD_REQUEST,
+            Json(AuthResponse {
+                success: false,
+                message: "Password must be at least 6 characters".to_string(),
+                token: None,
+                user_id: None,
+            }),
+        );
+    }
+
+    // Generate user ID and token (in production, use proper auth library)
+    let user_id = uuid::Uuid::new_v4().to_string();
+    let token = format!("aeterna_{}_{}", user_id.split('-').next().unwrap_or("token"), chrono::Utc::now().timestamp());
+
+    println!("✅ [AUTH]: New user registered: {}", payload.email);
+
+    (
+        StatusCode::CREATED,
+        Json(AuthResponse {
+            success: true,
+            message: format!("Welcome to AETERNA, {}!", payload.email),
+            token: Some(token),
+            user_id: Some(user_id),
+        }),
+    )
+}
+
+// User login endpoint
+async fn handle_login(
+    Json(payload): Json<RegisterRequest>,
+) -> (StatusCode, Json<AuthResponse>) {
+    if payload.email.is_empty() || payload.password.is_empty() {
+        return (
+            StatusCode::BAD_REQUEST,
+            Json(AuthResponse {
+                success: false,
+                message: "Email and password required".to_string(),
+                token: None,
+                user_id: None,
+            }),
+        );
+    }
+
+    // Generate token (in production, verify against database)
+    let user_id = uuid::Uuid::new_v4().to_string();
+    let token = format!("aeterna_{}_{}", user_id.split('-').next().unwrap_or("token"), chrono::Utc::now().timestamp());
+
+    println!("✅ [AUTH]: User logged in: {}", payload.email);
+
+    (
+        StatusCode::OK,
+        Json(AuthResponse {
+            success: true,
+            message: "Login successful".to_string(),
+            token: Some(token),
+            user_id: Some(user_id),
         }),
     )
 }

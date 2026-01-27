@@ -2820,6 +2820,7 @@ name = "lwas_cli"
 version = "1.0.0-SINGULARITY"
 dependencies = [
  "axum",
+ "chrono",
  "dotenvy",
  "futures",
  "lwas_core",
@@ -2827,6 +2828,7 @@ dependencies = [
  "serde_json",
  "tokio",
  "tower-http 0.5.2",
+ "uuid",
 ]
 
 [[package]]
