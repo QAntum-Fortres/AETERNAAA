@@ -21,6 +21,7 @@ import { DepartmentEngine } from './DepartmentEngine';
 import { Telemetry } from './telemetry/Telemetry';
 import { Logger } from './telemetry/Logger';
 import { PaymentGateway } from './economy/PaymentGateway';
+import { ProductCatalog, PRODUCTS } from './economy/Products';
 import * as path from 'path';
 
 /**
@@ -152,13 +153,108 @@ export class SingularityServer {
       res.sendFile(path.join(dashboardDir, 'qantum-singular-interface.html'));
     });
 
+    // --- Products Catalog ---
+    this.app.get('/api/products', (req: any, res: any) => {
+      const category = req.query.category;
+      const interval = req.query.interval;
+      
+      let products = PRODUCTS;
+      if (category) {
+        products = products.filter(p => p.category === category);
+      }
+      if (interval) {
+        products = products.filter(p => p.interval === interval);
+      }
+      
+      res.json({
+        products: products.map(p => ({
+          ...p,
+          formattedPrice: ProductCatalog.formatPrice(p)
+        })),
+        count: products.length
+      });
+    });
+
+    this.app.get('/api/products/:id', (req: any, res: any) => {
+      const product = ProductCatalog.getById(req.params.id);
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      res.json({
+        ...product,
+        formattedPrice: ProductCatalog.formatPrice(product)
+      });
+    });
+
     // --- Economy & Payments ---
     this.app.post('/api/economy/pay', async (req: any, res: any) => {
-      const { amount, provider, metadata } = req.body;
+      const { productId, amount, provider, metadata } = req.body;
+      
       try {
-        const payment = await this.paymentGateway.createPayment(amount, 'usd', provider, metadata);
-        res.json(payment);
+        let finalAmount = amount;
+        let currency = 'eur';
+        let paymentMetadata = metadata || {};
+
+        // If productId is provided, use product pricing
+        if (productId) {
+          const product = ProductCatalog.getById(productId);
+          if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+          }
+          finalAmount = product.price;
+          currency = product.currency.toLowerCase();
+          paymentMetadata = {
+            ...paymentMetadata,
+            productId: product.id,
+            productName: product.name,
+            productCategory: product.category
+          };
+        }
+
+        const payment = await this.paymentGateway.createPayment(
+          finalAmount, 
+          currency, 
+          provider || 'stripe', 
+          paymentMetadata
+        );
+        
+        res.json({
+          ...payment,
+          product: productId ? ProductCatalog.getById(productId) : null
+        });
       } catch (err: any) {
+        this.logger.error('PAYMENT', 'Payment creation failed', err);
+        res.status(500).json({ error: err.message });
+      }
+    });
+
+    // Create checkout session for product
+    this.app.post('/api/economy/checkout', async (req: any, res: any) => {
+      const { productId, successUrl, cancelUrl } = req.body;
+      
+      try {
+        const product = ProductCatalog.getById(productId);
+        if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+        }
+
+        const checkoutUrl = await this.paymentGateway.createCheckoutLink(
+          product.price,
+          product.currency.toLowerCase(),
+          product.name,
+          successUrl || 'https://yourdomain.com/success',
+          cancelUrl || 'https://yourdomain.com/cancel'
+        );
+
+        res.json({
+          checkoutUrl,
+          product: {
+            ...product,
+            formattedPrice: ProductCatalog.formatPrice(product)
+          }
+        });
+      } catch (err: any) {
+        this.logger.error('CHECKOUT', 'Checkout creation failed', err);
         res.status(500).json({ error: err.message });
       }
     });
