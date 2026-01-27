@@ -36,5 +36,14 @@ export const useSovereignAPI = () => {
         return await response.json();
     };
 
-    return { fetchStatus, runRefactor, askOracle, generateAssets };
+    const createCheckoutSession = async (productId: string) => {
+        const response = await fetch(`${SOVEREIGN_BASE}/market/checkout`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId })
+        });
+        return await response.json();
+    };
+
+    return { fetchStatus, runRefactor, askOracle, generateAssets, createCheckoutSession };
 };

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: aeterna-core
+    env: docker
+    plan: free
+    dockerContext: .
+    healthCheckPath: /api/status
+    envVars:
+      - key: PORT
+        value: 8890
+      - key: RUST_LOG
+        value: info
+      - key: AETERNA_ENV
+        value: production
