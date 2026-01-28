@@ -1,13 +1,13 @@
-<<<<<<< HEAD
 # Render.com Production Deployment Configuration
-# Multi-service setup for AETERNAAA
+# Multi-service setup for AETERNAAA (Singularity Genesis)
 
 services:
-  # Rust Backend Service
+  # 🧠 Rust Core Monolith (Sovereign Engine)
   - type: web
     name: aeterna-backend
     env: docker
     plan: pro
+    region: frankfurt
     dockerContext: .
     dockerfilePath: Dockerfile.backend
     healthCheckPath: /telemetry
@@ -20,6 +20,8 @@ services:
         value: info
       - key: AETERNA_ENV
         value: production
+      - key: RAIL_ID
+        value: "b156e9ed-bf3d-48d1-9b22-c2629ae816ed"
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: EXCHANGE_API_KEY
@@ -31,7 +33,7 @@ services:
       - key: CORS_ORIGIN
         value: https://aeterna.website
 
-  # TypeScript Middleware Service
+  # ⚙️ TypeScript Middleware Orchestrator (OmniCore)
   - type: web
     name: aeterna-middleware
     env: docker
@@ -48,8 +50,6 @@ services:
         value: 8765
       - key: STRIPE_SECRET_KEY
         sync: false
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
       - key: EXCHANGE_API_KEY
         sync: false
       - key: EXCHANGE_SECRET_KEY
@@ -59,7 +59,7 @@ services:
       - key: CORS_ORIGIN
         value: https://aeterna-backend.onrender.com
 
-  # Frontend Service (Static)
+  # 🌐 Future-Proof Frontend (Vortex UI)
   - type: web
     name: aeterna-frontend
     env: static
@@ -74,25 +74,3 @@ services:
         value: https://api.aeterna.website
       - key: VITE_WS_URL
         value: wss://ws.aeterna.website
-=======
-services:
-  - type: web
-    name: aeterna-logos
-    env: docker
-    plan: starter
-    region: frankfurt
-    dockerContext: .
-    dockerfilePath: Dockerfile
-    healthCheckPath: /api/health
-    envVars:
-      - key: PORT
-        value: 8080
-      - key: PINECONE_API_KEY
-        sync: true
-      - key: PINECONE_INDEX
-        value: qantum-empire
-      - key: DOSSIER_PATH
-        value: /tmp/aeterna_dossier
-      - key: RAIL_ID
-        value: "b156e9ed-bf3d-48d1-9b22-c2629ae816ed"
->>>>>>> f0a1a5c ( [AETERNA]: Render Blueprint Manifested for lwas_cli singularity.)
