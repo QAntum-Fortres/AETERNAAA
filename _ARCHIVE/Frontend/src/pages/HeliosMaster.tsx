@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { useSovereignStore } from '../core/socket/NativeWebSocket';
 import { NervePanel } from '../components/NervePanel';
+import  ControlPanel  from '../components/ControlPanel'; 
+import { ErrorButton } from '../saas/components/ErrorButton';
 
 // --- COMPONENTS ---
 
@@ -70,6 +72,12 @@ const SubstrateCard = ({ icon: Icon, label, value, color }: {
 
 // --- MAIN PAGE ---
 
+const PROJECT_URLS = {
+    app: "https://app.aeterna.website",
+    api: "https://api.aeterna.website",
+    docs: "https://docs.aeterna.website",
+};
+
 export const HeliosMaster = () => {
     const { metrics, isConnected } = useSovereignStore();
 
@@ -104,10 +112,27 @@ export const HeliosMaster = () => {
                         </h1>
                     </div>
 
-                    <div className="flex gap-4">
-                        <SubstrateCard
-                            icon={Cpu}
-                            label="Ryzen 7950X"
+                    <div className="flex flex-col items-end gap-4">
+                        <div className="flex gap-4">
+                            <a
+                                href={`${PROJECT_URLS.app}/login`}
+                                className="px-6 py-2 border border-[#2a2a50] hover:border-[var(--neon-cyan)] hover:text-[var(--neon-cyan)] rounded-lg text-xs font-bold tracking-widest uppercase transition-all"
+                            >
+                                Login
+                            </a>
+                            <a
+                                href={`${PROJECT_URLS.app}/register`}
+                                className="px-6 py-2 bg-[var(--neon-cyan)] text-black font-black italic uppercase tracking-tighter hover:bg-white transition-all rounded-lg"
+                            >
+                                Register Access
+                            </a>
+                            <ErrorButton />
+                        </div>
+                        
+                        <div className="flex gap-4">
+                            <SubstrateCard
+                                icon={Cpu}
+                                label="Ryzen 7950X"
                             value={`${metrics?.hardware?.cpu?.toFixed(1) || "0.0"}%`}
                             color="var(--neon-cyan)"
                         />
@@ -125,7 +150,11 @@ export const HeliosMaster = () => {
                             </div>
                         </div>
                     </div>
+                    </div>
                 </header>
+
+                {/* NEW COMMAND CENTER INTEGRATION */}
+                <ControlPanel />
 
                 {/* GLOBAL EMPIRE STATS */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">

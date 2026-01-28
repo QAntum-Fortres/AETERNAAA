@@ -37,25 +37,50 @@ services:
     container_name: aeterna-middleware
     restart: unless-stopped
     ports:
+      - "3000:3000"
       - "8765:8765"
     environment:
       - NODE_ENV=production
-      - HTTP_PORT=8890
+      - HTTP_PORT=3000
       - WS_PORT=8765
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - EXCHANGE_API_KEY=${EXCHANGE_API_KEY}
       - EXCHANGE_SECRET_KEY=${EXCHANGE_SECRET_KEY}
       - CORS_ORIGIN=${CORS_ORIGIN:-*}
+      - POSTGRES_URL=postgresql://postgres:password@postgres:5432/aeterna
     depends_on:
       backend:
         condition: service_healthy
+      postgres:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8890/api/status", "||", "exit", "1"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/status", "||", "exit", "1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - aeterna-network
+
+  # Database - PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: aeterna-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=aeterna
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - aeterna-network
 
@@ -105,6 +130,8 @@ volumes:
   aeterna-data:
     driver: local
   nginx-logs:
+    driver: local
+  pg_data:
     driver: local
 
 networks:

@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import * as Sentry from '@sentry/react';
+
 import {
     Home, MessageSquare, Terminal as TerminalIcon, GitBranch, Cpu, Zap, Shield, Atom, Dna, Globe,
-    Menu, X, Search, Bell, Settings, Send, 
+    Menu, X, Search, Bell, Settings, Send,
     Trash, Link as LinkIcon, User, Activity, ShoppingBag, DollarSign
 } from 'lucide-react';
 import { useSovereignStore } from '../core/socket/NativeWebSocket';
@@ -15,6 +17,21 @@ import { GlobalState } from '../types/sovereign';
 import MoneyDashboard from './MoneyDashboard';
 import MainSaaSPlatform from './MainSaaSPlatform';
 import AntigravityDashboard from './AntigravityDashboard';
+
+// Add this button component to your app to test Sentry's error tracking
+function ErrorButton() {
+    return (
+        <button
+            onClick={() => {
+                throw new Error('This is your first error!');
+            }}
+            className="px-3 py-1.5 bg-red-600/20 border border-red-600/50 rounded-lg text-[10px] text-red-500 font-bold hover:bg-red-600 hover:text-white transition-all uppercase tracking-widest"
+        >
+            Break the world
+        </button>
+    );
+}
+
 
 // --- SUBCOMPONENTS ---
 
@@ -239,7 +256,9 @@ export const SovereignHUD = () => {
                             <Bell size={18} />
                             <span className="absolute -top-1 -right-1 w-2 h-2 bg-[var(--neon-purple)] rounded-full animate-ping" />
                         </button>
+                        <ErrorButton />
                         <button title="Settings" className="text-gray-400 hover:text-white transition-colors"><Settings size={18} /></button>
+
                     </div>
                 </header>
 
