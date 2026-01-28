@@ -10,7 +10,7 @@ SERVICE_ID=${1:-$DEFAULT_SERVICE_ID}
 
 echo "🚀 Preparing to trigger deploy on Render..."
 
-RENDER_API_KEY="rnd_2voZPGRNZjBw8wNQkR7NHMqLGL8Y"
+RENDER_API_KEY="rnd_F8UnV18KF5UGsKi4NBmo84XKrqCB"
 
 if [ -z "$RENDER_API_KEY" ]; then
   echo "❌ Error: RENDER_API_KEY environment variable is not set."
