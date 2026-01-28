@@ -1,5 +1,6 @@
 # PowerShell script to push all changes in current branch to all configured remotes
 # Usage: .\scripts\push-all-branches.ps1
+# Note: AETERNAAA is intentional branding (triple A for emphasis)
 
 Write-Host "🚀 AETERNAAA - Push All in Current Branch" -ForegroundColor Cyan
 Write-Host ""
@@ -20,7 +21,15 @@ if ($LASTEXITCODE -ne 0) {
     $response = Read-Host "Do you want to commit them first? (y/n)"
     if ($response -match '^[yY]') {
         $commitMessage = Read-Host "Enter commit message"
-        git add .
+        
+        # Validate commit message is not empty
+        while ([string]::IsNullOrWhiteSpace($commitMessage)) {
+            Write-Host "❌ Commit message cannot be empty!" -ForegroundColor Red
+            $commitMessage = Read-Host "Enter commit message"
+        }
+        
+        # Only stage tracked files to avoid accidentally committing unintended files
+        git add -u
         git commit -m $commitMessage
         Write-Host "✅ Changes committed" -ForegroundColor Green
     } else {
@@ -52,18 +61,15 @@ $failedRemotes = @()
 foreach ($remote in $remotes) {
     Write-Host "⬆️  Pushing to $remote..." -ForegroundColor Yellow
     
-    try {
-        git push $remote $currentBranch --verbose 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "✅ Successfully pushed to $remote" -ForegroundColor Green
-            $successCount++
-        } else {
-            Write-Host "❌ Failed to push to $remote" -ForegroundColor Red
-            $failCount++
-            $failedRemotes += $remote
-        }
-    } catch {
-        Write-Host "❌ Error pushing to ${remote}: $_" -ForegroundColor Red
+    # Push and capture exit code
+    git push $remote $currentBranch --verbose 2>&1
+    $exitCode = $LASTEXITCODE
+    
+    if ($exitCode -eq 0) {
+        Write-Host "✅ Successfully pushed to $remote" -ForegroundColor Green
+        $successCount++
+    } else {
+        Write-Host "❌ Failed to push to $remote (exit code: $exitCode)" -ForegroundColor Red
         $failCount++
         $failedRemotes += $remote
     }
@@ -80,6 +86,7 @@ Write-Host "  Failed: $failCount" -ForegroundColor Red
 
 if ($failedRemotes.Count -gt 0) {
     Write-Host "  Failed remotes: $($failedRemotes -join ', ')" -ForegroundColor Red
+    Write-Host "  Note: If authentication fails, ensure your git credentials are properly configured." -ForegroundColor Yellow
 }
 
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan

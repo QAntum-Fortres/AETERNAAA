@@ -1,8 +1,10 @@
 #!/bin/bash
 # Push all changes in current branch to all configured remotes
 # Usage: ./scripts/push-all-branches.sh
+# Note: AETERNAAA is intentional branding (triple A for emphasis)
 
-set -e
+# Don't exit on error - we want to try all remotes
+set +e
 
 # Colors for output
 RED='\033[0;31m'
@@ -26,7 +28,16 @@ if ! git diff-index --quiet HEAD --; then
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
         echo -e "${YELLOW}Enter commit message:${NC}"
         read -r commit_message
-        git add .
+        
+        # Validate commit message is not empty
+        while [ -z "$commit_message" ]; do
+            echo -e "${RED}❌ Commit message cannot be empty!${NC}"
+            echo -e "${YELLOW}Enter commit message:${NC}"
+            read -r commit_message
+        done
+        
+        # Only stage tracked files to avoid accidentally committing unintended files
+        git add -u
         git commit -m "$commit_message"
         echo -e "${GREEN}✅ Changes committed${NC}"
     else
@@ -58,19 +69,15 @@ FAILED_REMOTES=()
 for remote in $REMOTES; do
     echo -e "${YELLOW}⬆️  Pushing to $remote...${NC}"
     
-    # Try to push, capturing both stdout and stderr
-    if git push "$remote" "$CURRENT_BRANCH" --verbose 2>&1; then
-        EXIT_CODE=$?
-        if [ $EXIT_CODE -eq 0 ]; then
-            echo -e "${GREEN}✅ Successfully pushed to $remote${NC}"
-            ((SUCCESS_COUNT++))
-        else
-            echo -e "${RED}❌ Failed to push to $remote (exit code: $EXIT_CODE)${NC}"
-            ((FAIL_COUNT++))
-            FAILED_REMOTES+=("$remote")
-        fi
+    # Push and capture exit code
+    git push "$remote" "$CURRENT_BRANCH" --verbose
+    EXIT_CODE=$?
+    
+    if [ $EXIT_CODE -eq 0 ]; then
+        echo -e "${GREEN}✅ Successfully pushed to $remote${NC}"
+        ((SUCCESS_COUNT++))
     else
-        echo -e "${RED}❌ Failed to push to $remote${NC}"
+        echo -e "${RED}❌ Failed to push to $remote (exit code: $EXIT_CODE)${NC}"
         ((FAIL_COUNT++))
         FAILED_REMOTES+=("$remote")
     fi
