@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:strict": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
     "predeploy": "npm run build",

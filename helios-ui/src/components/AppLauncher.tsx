@@ -1,4 +1,4 @@
-﻿/**
+/**
  * App Launcher - Individual SaaS Application Interface
  * Provides seamless access to each SaaS application with unified branding
  */

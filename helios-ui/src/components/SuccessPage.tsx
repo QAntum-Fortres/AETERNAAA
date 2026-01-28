@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Success Page - Post-payment confirmation
  * Shows client their purchased SaaS applications and next steps
  */

@@ -4,11 +4,10 @@
 FROM rust:1.83-slim as builder
 
 # Cache buster to force rebuild
-ENV BUILD_DATE="2026-01-28"
+ENV BUILD_DATE="2026-01-28-v2"
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
     pkg-config \
     libssl-dev \
     ca-certificates \
@@ -17,11 +16,29 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /usr/src/aeterna
 
-# Copy all source code
+# Copy dependency files first for better caching
+COPY Cargo.toml Cargo.lock ./
+COPY lwas_core/Cargo.toml ./lwas_core/
+COPY lwas_cli/Cargo.toml ./lwas_cli/
+COPY lwas_parser/Cargo.toml ./lwas_parser/
+COPY lwas_economy/Cargo.toml ./lwas_economy/
+
+# Create dummy source files to build dependencies
+RUN mkdir -p lwas_core/src lwas_cli/src lwas_parser/src lwas_economy/src && \
+    echo "fn main() {}" > lwas_cli/src/main.rs && \
+    echo "" > lwas_core/src/lib.rs && \
+    echo "" > lwas_parser/src/lib.rs && \
+    echo "" > lwas_economy/src/lib.rs
+
+# Build dependencies (cached layer)
+RUN cargo build --release -p lwas_cli || true
+
+# Copy actual source code
 COPY . .
 
 # Build the actual application
-RUN cargo build --release -p lwas_cli
+RUN touch lwas_cli/src/main.rs lwas_core/src/lib.rs && \
+    cargo build --release -p lwas_cli
 
 # Runtime stage
 FROM debian:bookworm-slim
@@ -54,8 +71,8 @@ RUN mkdir -p /app/assets/micro_saas /data && \
 USER aeterna
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
-    CMD curl -f http://localhost:8890/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8890/telemetry || exit 1
 
 EXPOSE 8890
 
