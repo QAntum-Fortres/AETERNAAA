@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Client Portal - Complete user experience
  * Registration → Payment → Dashboard → SaaS Usage
  */

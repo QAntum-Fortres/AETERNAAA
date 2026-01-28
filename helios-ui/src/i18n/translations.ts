@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Internationalization for AETERNA.WEBSITE
  * Bulgarian + English support
  */
