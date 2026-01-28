@@ -29,6 +29,7 @@ nano .env.production  # Edit with your actual values
 - `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret (`whsec_...`)
 - `EXCHANGE_API_KEY` - Binance API key
 - `EXCHANGE_SECRET_KEY` - Binance secret key
+- `JULES_API_KEY` - Jules API key for Render deployment (e.g., `rnd_...`)
 
 ### Step 3: Build and Deploy
 

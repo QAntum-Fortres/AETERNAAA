@@ -27,6 +27,8 @@ services:
         sync: false
       - key: CORS_ORIGIN
         value: https://aeterna.website
+      - key: JULES_API_KEY
+        sync: false
 
   # TypeScript Middleware Service
   - type: web
@@ -53,6 +55,8 @@ services:
         sync: false
       - key: CORS_ORIGIN
         value: https://aeterna-backend.onrender.com
+      - key: JULES_API_KEY
+        sync: false
 
   # Frontend Service (Static)
   - type: web
@@ -69,3 +73,5 @@ services:
         value: https://api.aeterna.website
       - key: VITE_WS_URL
         value: wss://ws.aeterna.website
+      - key: VITE_JULES_API_KEY
+        sync: false
