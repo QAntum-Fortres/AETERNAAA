@@ -5,3 +5,6 @@ dist/
 *.log
 soul_memory.bin
 .env
+
+test-results/
+playwright-report/
