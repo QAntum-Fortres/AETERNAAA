@@ -1,0 +1,35 @@
+
+.threat-card {
+    background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 12px;
+    padding: 1.5rem; transition: all 0.3s ease;
+}
+.threat-card:hover { border-color: var(--accent); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2); }
+.threat-status {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+    background: rgba(16, 185, 129, 0.2); border: 1px solid var(--accent); border-radius: 20px;
+    font-size: 0.85rem; font-weight: 600; color: var(--accent); margin-bottom: 1rem;
+}
+.threat-status::before { content: '🔒'; font-size: 1rem; }
+.threat-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+.threat-method {
+    font-size: 0.85rem; color: var(--secondary); font-family: 'JetBrains Mono', monospace;
+    background: rgba(6, 182, 212, 0.1); padding: 0.25rem 0.5rem; border-radius: 4px; display: inline-block;
+}
+.code-block {
+    background: rgba(0, 0, 0, 0.5); border: 1px solid var(--glass-border); border-radius: 12px;
+    padding: 1.5rem; margin: 1rem 0; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; color: var(--accent);
+}
+.controls { display: flex; justify-content: center; gap: 1rem; margin-top: 3rem; flex-wrap: wrap; }
+.btn {
+    font-family: 'Space Grotesk', sans-serif; padding: 1rem 2rem; font-size: 1rem; font-weight: 600;
+    border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4); }
+.btn-secondary { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); color: var(--text-primary); }
+.btn-secondary:hover { border-color: var(--accent); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); }
+.status-bar {
+    position: fixed; bottom: 2rem; right: 2rem; background: var(--glass); backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: 50px; padding: 1rem 1.5rem;
+}

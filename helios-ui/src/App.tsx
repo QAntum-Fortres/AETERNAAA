@@ -2,6 +2,7 @@ import { SovereignHUD } from './components/SovereignHUD';
 import ClientPortal from './components/ClientPortal';
 import { useState, useEffect } from 'react';
 import "./App.css";
+import "./LegacyComponents.css";
 
 const BACKEND_URL = 'https://aeternaaa-production.up.railway.app';
 type AppMode = 'client' | 'admin';
