@@ -1,12 +1,13 @@
 # Render.com Production Deployment Configuration
-# Multi-service setup for AETERNAAA
+# Multi-service setup for AETERNAAA (Singularity Genesis)
 
 services:
-  # Rust Backend Service
+  # 🧠 Rust Core Monolith (Sovereign Engine)
   - type: web
     name: aeterna-backend
     env: docker
     plan: pro
+    region: frankfurt
     dockerContext: .
     dockerfilePath: Dockerfile.backend
     healthCheckPath: /telemetry
@@ -19,24 +20,28 @@ services:
         value: info
       - key: AETERNA_ENV
         value: production
+      - key: RAIL_ID
+        value: "b156e9ed-bf3d-48d1-9b22-c2629ae816ed"
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: EXCHANGE_API_KEY
         sync: false
       - key: EXCHANGE_SECRET_KEY
         sync: false
+      - key: GEMINI_API_KEY
+        sync: false
       - key: CORS_ORIGIN
         value: https://aeterna.website
       - key: JULES_API_KEY
         sync: false
 
-  # TypeScript Middleware Service
+  # ⚙️ TypeScript Middleware Orchestrator (OmniCore)
   - type: web
     name: aeterna-middleware
     env: docker
     plan: starter
-    dockerContext: ./OmniCore
-    dockerfilePath: ../Dockerfile.middleware
+    dockerContext: .
+    dockerfilePath: Dockerfile.middleware
     healthCheckPath: /api/status
     envVars:
       - key: NODE_ENV
@@ -47,18 +52,18 @@ services:
         value: 8765
       - key: STRIPE_SECRET_KEY
         sync: false
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
       - key: EXCHANGE_API_KEY
         sync: false
       - key: EXCHANGE_SECRET_KEY
+        sync: false
+      - key: GEMINI_API_KEY
         sync: false
       - key: CORS_ORIGIN
         value: https://aeterna-backend.onrender.com
       - key: JULES_API_KEY
         sync: false
 
-  # Frontend Service (Static)
+  # 🌐 Future-Proof Frontend (Vortex UI)
   - type: web
     name: aeterna-frontend
     env: static
