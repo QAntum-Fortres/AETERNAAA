@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import * as Sentry from "@sentry/react";
+import { AppProviders } from "./components/AppProviders";
 
 Sentry.init({
   dsn: "https://examplePublicKey@o0.ingest.sentry.io/0", // REPLACE WITH YOUR ACTUAL DSN
@@ -18,6 +19,8 @@ Sentry.init({
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <AppProviders>
+      <App />
+    </AppProviders>
   </React.StrictMode>,
 );
