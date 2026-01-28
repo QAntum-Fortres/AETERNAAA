@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+websockets
+requests
+fpdf2
+qrcode
+pillow
+stripe
+python-multipart
