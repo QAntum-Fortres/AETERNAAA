@@ -28,4 +28,11 @@ RUN mkdir -p /app/assets/micro_saas
 
 EXPOSE 8890
 
+<<<<<<< HEAD
 CMD ["./lwas_cli", "ignite"]
+=======
+# [ENTERPRISE_PILLAR]: Reliability handled by Cloud Run Orchestration
+# HEALTHCHECK removed to support dynamic port scaling
+
+CMD ["/app/lwas_cli"]
+>>>>>>> f0a1a5c ( [AETERNA]: Render Blueprint Manifested for lwas_cli singularity.)

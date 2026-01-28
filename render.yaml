@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Render.com Production Deployment Configuration
 # Multi-service setup for AETERNAAA
 
@@ -73,3 +74,25 @@ services:
         value: https://api.aeterna.website
       - key: VITE_WS_URL
         value: wss://ws.aeterna.website
+=======
+services:
+  - type: web
+    name: aeterna-logos
+    env: docker
+    plan: starter
+    region: frankfurt
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: PINECONE_API_KEY
+        sync: true
+      - key: PINECONE_INDEX
+        value: qantum-empire
+      - key: DOSSIER_PATH
+        value: /tmp/aeterna_dossier
+      - key: RAIL_ID
+        value: "b156e9ed-bf3d-48d1-9b22-c2629ae816ed"
+>>>>>>> f0a1a5c ( [AETERNA]: Render Blueprint Manifested for lwas_cli singularity.)
