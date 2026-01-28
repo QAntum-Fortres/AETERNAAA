@@ -4,7 +4,9 @@
 FROM rust:1.83-slim as builder
 
 # Cache buster to force rebuild
-ENV BUILD_DATE="2026-01-28-v2"
+ENV BUILD_DATE="2026-01-28-v3"
+ENV CARGO_INCREMENTAL=0
+ENV RUSTFLAGS="-C codegen-units=1"
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
