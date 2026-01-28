@@ -195,40 +195,37 @@ impl SovereignAudit {
     }
 
     fn detect_redundancy(&mut self) {
-        // Сканираме за реален технически дълг в кешираните файлове
-        // (Това е симулация на дълбоко сканиране за целите на активната хирургия)
-        let entropy_targets = vec![
-            (
-                "Unsafe Unwrap",
-                ".unwrap()",
-                FindingType::LogicGap,
-                "Replace with SovereignResult.",
-            ),
-            (
-                "Noetic Noise",
-                "println!",
-                FindingType::Redundancy,
-                "Use TelemetryHub for structured logging.",
-            ),
-            (
-                "Incomplete Logic",
-                "TODO",
-                FindingType::LogicGap,
-                "Manifest the missing soul fragment.",
-            ),
-        ];
+        println!("🏛️  AUDIT: ANALYZING LOGIC REDUNDANCY...");
+        let content_hashes: DashMap<String, Vec<PathBuf>> = DashMap::new();
 
-        for (title, _pattern, f_type, sugg) in entropy_targets {
-            self.findings.push(AuditFinding {
-                id: format!("{}-{}", title.replace(" ", "-"), self.findings.len()),
-                f_type,
-                title: title.into(),
-                files: vec![PathBuf::from(
-                    "C:\\RUST-LANGUAGE\\QANTUM-JULES\\lwas_core\\src\\organism.rs",
-                )],
-                impact_lines: 1,
-                suggestion: sugg.into(),
-            });
+        // Iterate over all indexed files in the registry to check for duplicate content
+        self.symbol_registry.par_iter().for_each(|entry| {
+            let info = entry.value();
+            if let Ok(content) = fs::read_to_string(&info.file_path) {
+                let content_hash = format!("{:x}", md5::compute(content.as_bytes()));
+                content_hashes
+                    .entry(content_hash)
+                    .or_insert_with(Vec::new)
+                    .push(info.file_path.clone());
+            }
+        });
+
+        // Generate findings for duplicates
+        for entry in content_hashes.into_iter() {
+            let (hash, files) = entry;
+            if files.len() > 1 {
+                self.findings.push(AuditFinding {
+                    id: format!("REDUNDANCY-{}", hash),
+                    f_type: FindingType::Redundancy,
+                    title: "Duplicate Logic Substrate Detected".into(),
+                    files: files.clone(),
+                    impact_lines: 0, // Could be calculated, but simplified for now
+                    suggestion: format!(
+                        "Redundant logic detected across {} files. Consolidate into a shared module to achieve Zero Entropy.",
+                        files.len()
+                    ),
+                });
+            }
         }
     }
     fn detect_dead_code(&mut self) {}
