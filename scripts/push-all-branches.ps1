@@ -14,15 +14,15 @@ try {
     exit 1
 }
 
-# Check if there are uncommitted changes
+# Check if there are uncommitted changes (tracked files only)
 $hasChanges = git diff-index --quiet HEAD --
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "⚠️  You have uncommitted changes!" -ForegroundColor Yellow
+    Write-Host "⚠️  You have uncommitted changes in tracked files!" -ForegroundColor Yellow
     $response = Read-Host "Do you want to commit them first? (y/n)"
     if ($response -match '^[yY]') {
         $commitMessage = Read-Host "Enter commit message"
         
-        # Validate commit message is not empty
+        # Validate commit message is not empty (trim whitespace)
         while ([string]::IsNullOrWhiteSpace($commitMessage)) {
             Write-Host "❌ Commit message cannot be empty!" -ForegroundColor Red
             $commitMessage = Read-Host "Enter commit message"
@@ -30,7 +30,16 @@ if ($LASTEXITCODE -ne 0) {
         
         # Only stage tracked files to avoid accidentally committing unintended files
         git add -u
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "❌ Failed to stage changes!" -ForegroundColor Red
+            exit 1
+        }
+        
         git commit -m $commitMessage
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "❌ Failed to commit changes!" -ForegroundColor Red
+            exit 1
+        }
         Write-Host "✅ Changes committed" -ForegroundColor Green
     } else {
         Write-Host "⚠️  Proceeding without committing..." -ForegroundColor Yellow

@@ -20,9 +20,9 @@ echo ""
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo -e "${YELLOW}📍 Current branch: ${CURRENT_BRANCH}${NC}"
 
-# Check if there are uncommitted changes
+# Check if there are uncommitted changes (tracked files only)
 if ! git diff-index --quiet HEAD --; then
-    echo -e "${YELLOW}⚠️  You have uncommitted changes!${NC}"
+    echo -e "${YELLOW}⚠️  You have uncommitted changes in tracked files!${NC}"
     echo -e "${YELLOW}Do you want to commit them first? (y/n)${NC}"
     read -r response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -30,16 +30,24 @@ if ! git diff-index --quiet HEAD --; then
         read -r commit_message
         
         # Validate commit message is not empty
-        while [ -z "$commit_message" ]; do
+        while [ -z "$(echo "$commit_message" | xargs)" ]; do
             echo -e "${RED}❌ Commit message cannot be empty!${NC}"
             echo -e "${YELLOW}Enter commit message:${NC}"
             read -r commit_message
         done
         
         # Only stage tracked files to avoid accidentally committing unintended files
-        git add -u
-        git commit -m "$commit_message"
-        echo -e "${GREEN}✅ Changes committed${NC}"
+        if git add -u; then
+            if git commit -m "$commit_message"; then
+                echo -e "${GREEN}✅ Changes committed${NC}"
+            else
+                echo -e "${RED}❌ Failed to commit changes!${NC}"
+                exit 1
+            fi
+        else
+            echo -e "${RED}❌ Failed to stage changes!${NC}"
+            exit 1
+        fi
     else
         echo -e "${YELLOW}⚠️  Proceeding without committing...${NC}"
     fi

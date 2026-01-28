@@ -5,6 +5,14 @@
 REMOTE=${1:-origin}
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
+# Validate remote exists
+if ! git remote | grep -q "^${REMOTE}$"; then
+    echo "❌ Remote '$REMOTE' does not exist"
+    echo "Available remotes:"
+    git remote
+    exit 1
+fi
+
 echo "🚀 Pushing $CURRENT_BRANCH to $REMOTE..."
 
 if git push "$REMOTE" "$CURRENT_BRANCH" --verbose; then
