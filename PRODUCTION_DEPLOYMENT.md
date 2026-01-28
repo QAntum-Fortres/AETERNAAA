@@ -83,6 +83,9 @@ EXCHANGE_SECRET_KEY=...
 TELEGRAM_BOT_TOKEN=...
 TELEGRAM_API_URL=https://api.telegram.org
 
+# Jules API Integration
+JULES_API_KEY=rnd_2voZPGRNZjBw8wNQkR7NHMqLGL8Y
+
 # Platform Configuration
 PORT=8890
 WS_PORT=8765
