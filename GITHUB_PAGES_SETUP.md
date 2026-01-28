@@ -11,8 +11,12 @@ This repository is now configured to automatically deploy the AETERNA.WEBSITE Sa
 - **Trigger**: Runs on every push to `main` branch, or manually via workflow dispatch
 
 ### 2. Build Configuration
-- **Vite Base Path**: Set to `/AETERNAAA/` to match the repository name
-- **Build Script**: Modified to skip TypeScript type checking (prevents build failures from unused components)
+- **Vite Base Path**: Conditionally set based on environment:
+  - `/AETERNAAA/` for GitHub Pages deployment
+  - `./` for local/Tauri development
+- **Build Script**: Modified to skip TypeScript type checking
+  - **Note**: This is a temporary workaround to prevent build failures from unused variables in components that aren't currently used in production
+  - **Recommendation**: Fix the TypeScript errors in unused components as a follow-up task for better code quality
 - **.nojekyll File**: Added to ensure GitHub Pages serves the single-page application correctly
 
 ## How to Enable GitHub Pages

@@ -35,6 +35,8 @@ jobs:
 
       - name: Build
         working-directory: helios-ui
+        env:
+          GITHUB_PAGES: true
         run: npm run build
 
       - name: Setup Pages

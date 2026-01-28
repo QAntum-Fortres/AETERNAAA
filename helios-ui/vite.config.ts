@@ -7,7 +7,7 @@ const host = process.env.TAURI_DEV_HOST;
 // https://vite.dev/config/
 export default defineConfig(async () => ({
   plugins: [react()],
-  base: '/AETERNAAA/',
+  base: process.env.GITHUB_PAGES ? '/AETERNAAA/' : './',
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
