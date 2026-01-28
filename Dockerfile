@@ -4,7 +4,7 @@
 FROM rust:1.85-slim as builder
 
 # Install Node.js for Frontend Build
-RUN apt-get update && apt-get install -y curl pkg-config libssl-dev
+RUN apt-get update && apt-get install -y curl pkg-config libssl-dev build-essential
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
 

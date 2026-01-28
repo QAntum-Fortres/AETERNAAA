@@ -101,21 +101,18 @@ impl SovereignAudit {
 
     fn build_registry(&self, paths: &[PathBuf]) -> SovereignResult<()> {
         paths.par_iter().for_each(|path| {
-            for entry in WalkDir::new(path)
-                .into_iter()
-                .flatten()
-                .filter_map(|e| {
-                    let path = e.path();
-                    path.extension()
-                        .and_then(|ext| {
-                            if ext == "rs" || ext == "ts" || ext == "js" {
-                                Some(path.to_path_buf())
-                            } else {
-                                None
-                            }
-                        })
-                        .map(|_| e)
-                }) {
+            for entry in WalkDir::new(path).into_iter().flatten().filter_map(|e| {
+                let path = e.path();
+                path.extension()
+                    .and_then(|ext| {
+                        if ext == "rs" || ext == "ts" || ext == "js" {
+                            Some(path.to_path_buf())
+                        } else {
+                            None
+                        }
+                    })
+                    .map(|_| e)
+            }) {
                 self.index_file(entry.path());
             }
         });
@@ -169,7 +166,8 @@ impl SovereignAudit {
                 for entry in WalkDir::new(path)
                     .into_iter()
                     .flatten()
-                    .filter(|e| e.path().is_file()) {
+                    .filter(|e| e.path().is_file())
+                {
                     if let Ok(file) = fs::File::open(entry.path()) {
                         if let Ok(mmap) = unsafe { Mmap::map(&file) } {
                             let content = String::from_utf8_lossy(&mmap);
@@ -220,7 +218,7 @@ impl SovereignAudit {
             ),
         ];
 
-        for (title, pattern, f_type, sugg) in entropy_targets {
+        for (title, _pattern, f_type, sugg) in entropy_targets {
             self.findings.push(AuditFinding {
                 id: format!("{}-{}", title.replace(" ", "-"), self.findings.len()),
                 f_type,
