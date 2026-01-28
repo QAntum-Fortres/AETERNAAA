@@ -33,15 +33,15 @@ RUN mkdir -p lwas_core/src lwas_cli/src lwas_parser/src lwas_economy/src && \
     echo "" > lwas_parser/src/lib.rs && \
     echo "" > lwas_economy/src/lib.rs
 
-# Build dependencies (cached layer)
-RUN cargo build --release -p lwas_cli || true
+# Build dependencies (cached layer) - constrained jobs for memory safety
+RUN cargo build --release -p lwas_cli --jobs 1 || true
 
 # Copy actual source code
 COPY . .
 
-# Build the actual application
+# Build the actual application - constrained jobs to prevent OOM (Exit 101)
 RUN touch lwas_cli/src/main.rs lwas_core/src/lib.rs && \
-    cargo build --release -p lwas_cli
+    cargo build --release -p lwas_cli --jobs 1
 
 # Runtime stage
 FROM debian:bookworm-slim
