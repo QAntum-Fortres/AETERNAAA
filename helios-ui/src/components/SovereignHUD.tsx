@@ -17,6 +17,9 @@ import { GlobalState } from '../types/sovereign';
 import MoneyDashboard from './MoneyDashboard';
 import MainSaaSPlatform from './MainSaaSPlatform';
 import AntigravityDashboard from './AntigravityDashboard';
+import { LiveTerminal } from '../features/terminal/LiveTerminal';
+import { ConsensusPanel } from '../features/brain/ConsensusPanel';
+import { useHiveMind } from '../features/brain/useHiveMind';
 
 // Add this button component to your app to test Sentry's error tracking
 function ErrorButton() {
@@ -89,6 +92,15 @@ export const SovereignHUD = () => {
     const [activePage, setActivePage] = useState<Page>('dashboard');
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [isThinking, setIsThinking] = useState(false);
+    const { processConsensus } = useHiveMind();
+
+    // Hive Mind Oscillation Cycle
+    useEffect(() => {
+        const interval = setInterval(() => {
+            processConsensus('AET/USD', metrics.obi, metrics.entropy);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [metrics.obi, metrics.entropy, processConsensus]);
 
     useEffect(() => {
         const unlisten = listen('state-update', (event: any) => {
@@ -287,16 +299,24 @@ export const SovereignHUD = () => {
                                 <div className="grid grid-cols-12 gap-6">
                                     <div className="col-span-12 md:col-span-8 p-6 rounded-xl bg-[#0a0a12] border border-[#2a2a50]">
                                         <div className="flex justify-between items-center mb-6">
-                                            <h3 className="text-xs font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2"> <Activity size={14} /> Entropy Pulse</h3>
-                                            <div className="text-[10px] text-gray-600 font-mono">SAMPLING: {globalState ? (Number(globalState.total_nodes) / 1e9).toFixed(1) : "2.1"}B NODES</div>
+                                            <h3 className="text-xs font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2"> <Atom size={14} /> Hive Mind Consensus</h3>
+                                            <div className="text-[10px] text-gray-600 font-mono">STATUS: OSCILLATING</div>
                                         </div>
-                                        <div className="h-64"><MetricsChart /></div>
+                                        <div className="h-64"><ConsensusPanel /></div>
                                     </div>
                                     <div className="col-span-12 md:col-span-4 space-y-6">
                                         <StatCard label="Vectors Ingested" value={globalState ? `${(Number(globalState.total_nodes) / 1e9).toFixed(1)}B` : "2.1B"} color="var(--neon-cyan)" />
                                         <StatCard label="Logical Entropy" value={globalState ? globalState.entropy.toFixed(4) : (metrics.entropy * 10).toFixed(4)} color="var(--neon-red)" />
                                         <StatCard label="Axiom Compliance" value="1001/1001" color="var(--neon-green)" />
                                     </div>
+                                </div>
+                                <div className="grid grid-cols-12 gap-6">
+                                     <div className="col-span-12 p-6 rounded-xl bg-[#0a0a12] border border-[#2a2a50]">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="text-xs font-bold text-cyan-500 tracking-widest uppercase flex items-center gap-2"> <TerminalIcon size={14} /> Veritas Live Stream</h3>
+                                        </div>
+                                        <LiveTerminal className="h-[200px]" />
+                                     </div>
                                 </div>
                             </motion.div>
                         )}

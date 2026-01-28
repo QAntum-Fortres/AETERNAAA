@@ -45,5 +45,44 @@ export const useSovereignAPI = () => {
         return await response.json();
     };
 
-    return { fetchStatus, runRefactor, askOracle, generateAssets, createCheckoutSession };
+    /** SaaS Platform Endpoints **/
+    const fetchSaaSApps = async () => {
+        const response = await fetch(`${SOVEREIGN_BASE}/saas`);
+        return await response.json();
+    };
+
+    const getSaaSMetrics = async () => {
+        const response = await fetch(`${SOVEREIGN_BASE}/saas/metrics/overview`);
+        return await response.json();
+    };
+
+    const executeSaaSAutomation = async (workflowName: string) => {
+        const response = await fetch(`${SOVEREIGN_BASE}/saas/automation/execute`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ workflow_name: workflowName })
+        });
+        return await response.json();
+    };
+
+    const generateAndDeploySaaS = async (task: any, pricing: any) => {
+        const response = await fetch(`${SOVEREIGN_BASE}/saas/generate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ task, pricing })
+        });
+        return await response.json();
+    };
+
+    return { 
+        fetchStatus, 
+        runRefactor, 
+        askOracle, 
+        generateAssets, 
+        createCheckoutSession,
+        fetchSaaSApps,
+        getSaaSMetrics,
+        executeSaaSAutomation,
+        generateAndDeploySaaS
+    };
 };

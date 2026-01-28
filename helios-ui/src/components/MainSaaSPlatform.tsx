@@ -12,6 +12,7 @@ import {
   Activity, Workflow, Sliders, Target, CheckCircle, AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSovereignAPI } from '../hooks/useSovereignAPI';
 
 interface SaaSApp {
   id: string;
@@ -195,21 +196,45 @@ export default function MainSaaSPlatform() {
   const [activeTab, setActiveTab] = useState<'overview' | 'apps' | 'analytics' | 'account'>('overview');
   const [stats, setStats] = useState<PlatformStats | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [liveApps, setLiveApps] = useState<any[]>([]);
+  const { fetchSaaSApps, getSaaSMetrics } = useSovereignAPI();
 
   useEffect(() => {
-    // Load platform statistics
-    const platformStats: PlatformStats = {
-      totalUsers: SAAS_APPLICATIONS.reduce((sum, app) => sum + app.metrics.activeUsers, 0),
-      totalRevenue: SAAS_APPLICATIONS.reduce((sum, app) => sum + app.metrics.revenue, 0),
-      activeApps: SAAS_APPLICATIONS.filter(app => app.status === 'active').length,
-      uptime: 99.97,
-      automationTasks: 2500000,
-      aiInteractions: 15600000
+    const loadData = async () => {
+        try {
+            const data = await fetchSaaSApps();
+            if (data.applications) setLiveApps(data.applications);
+            
+            const metrics = await getSaaSMetrics();
+            if (metrics) {
+                setStats({
+                  totalUsers: metrics.active_users,
+                  totalRevenue: metrics.total_revenue,
+                  activeApps: metrics.total_apps,
+                  uptime: 99.99,
+                  automationTasks: metrics.automation_tasks_completed,
+                  aiInteractions: 15600000
+                });
+            }
+        } catch (e) {
+            console.error("SaaS API unreachable, using static fallback", e);
+            // Fallback to static
+            const platformStats: PlatformStats = {
+              totalUsers: SAAS_APPLICATIONS.reduce((sum, app) => sum + app.metrics.activeUsers, 0),
+              totalRevenue: SAAS_APPLICATIONS.reduce((sum, app) => sum + app.metrics.revenue, 0),
+              activeApps: SAAS_APPLICATIONS.filter(app => app.status === 'active').length,
+              uptime: 99.97,
+              automationTasks: 2500000,
+              aiInteractions: 15600000
+            };
+            setStats(platformStats);
+        }
     };
-    setStats(platformStats);
+    
+    loadData();
   }, []);
 
-  const filteredApps = SAAS_APPLICATIONS.filter(app =>
+  const filteredApps = (liveApps.length > 0 ? liveApps : SAAS_APPLICATIONS).filter(app =>
     app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     app.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     app.category.includes(searchQuery.toLowerCase())
