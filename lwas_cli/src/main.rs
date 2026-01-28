@@ -27,12 +27,44 @@ struct RegisterRequest {
     password: String,
 }
 
+#[derive(Deserialize)]
+struct CheckoutRequest {
+    plan_id: String,
+    email: String,
+    success_url: Option<String>,
+    cancel_url: Option<String>,
+}
+
 #[derive(Serialize)]
 struct AuthResponse {
     success: bool,
     message: String,
     token: Option<String>,
     user_id: Option<String>,
+}
+
+#[derive(Serialize)]
+struct CheckoutResponse {
+    success: bool,
+    checkout_url: Option<String>,
+    session_id: Option<String>,
+    error: Option<String>,
+}
+
+#[derive(Serialize)]
+struct PlanTier {
+    id: String,
+    name: String,
+    price: u32,
+    currency: String,
+    features: Vec<String>,
+    recommended: bool,
+}
+
+#[derive(Serialize)]
+struct PlansResponse {
+    success: bool,
+    plans: Vec<PlanTier>,
 }
 
 #[derive(Serialize)]
@@ -83,6 +115,9 @@ async fn main() {
         .route("/reality-map", get(handle_reality_map))
         .route("/api/auth/register", post(handle_register))
         .route("/api/auth/login", post(handle_login))
+        .route("/api/payments/plans", get(handle_get_plans))
+        .route("/api/payments/checkout", post(handle_checkout))
+        .route("/api/payments/webhook", post(handle_webhook))
         .route("/health", get(handle_health))
         .layer(CorsLayer::permissive())
         .with_state(shared_state.clone());
