@@ -1,103 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX GENESIS | Autonomous Bio-Digital Organism</title>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QAntum Sovereign Interface</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #a855f7; --secondary: #06b6d4; --accent: #10b981; --warning: #f59e0b;
-            --danger: #ef4444; --surface: rgba(17, 24, 39, 0.8); --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1); --text-primary: #f9fafb; --text-secondary: #d1d5db;
-            --text-dim: #9ca3af; --shadow-glow: 0 0 40px rgba(168, 85, 247, 0.3);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'JetBrains Mono', monospace; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #1e293b 100%);
-            color: var(--text-primary); min-height: 100vh; overflow-x: hidden; position: relative;
-        }
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
-        .particle {
-            position: absolute; width: 2px; height: 2px; background: var(--secondary); border-radius: 50%;
-            animation: float 20s infinite; opacity: 0.4;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 0.4; } 90% { opacity: 0.4; } 100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
-        }
-        .container { position: relative; z-index: 1; max-width: 1600px; margin: 0 auto; padding: 2rem; }
-        .hero {
-            text-align: center; padding: 4rem 2rem; background: var(--glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 24px; margin-bottom: 3rem;
-            box-shadow: var(--shadow-glow); animation: slideDown 0.8s ease-out;
-        }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
-        .ascii-logo {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.5rem; line-height: 1.2; color: var(--primary);
-            font-weight: 800; text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); white-space: pre; overflow-x: auto;
-            margin: 0 auto 2rem; display: inline-block;
-        }
-        .tagline {
-            font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 500;
-            background: linear-gradient(135deg, var(--secondary), var(--primary), var(--accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem;
-        }
-        .subtitle { font-size: 1.2rem; color: var(--warning); font-style: italic; margin-bottom: 2rem; }
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;
-            margin-bottom: 3rem; animation: fadeIn 1s ease-out 0.3s both;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .stat-card {
-            background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-radius: 16px; padding: 1.5rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(168, 85, 247, 0.2);
-            border-color: var(--primary);
-        }
-        .stat-label { font-size: 0.9rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
-        .stat-value { font-size: 2rem; font-weight: 800; color: var(--accent); font-family: 'Space Grotesk', sans-serif; }
-        .pillars-section { margin-bottom: 3rem; }
-        .section-title {
-            font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 2rem;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
-        .pillar-card {
-            background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 2rem; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative; overflow: hidden; animation: fadeInUp 0.6s ease-out both;
-        }
-        .pillar-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-            transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
-        }
-        .pillar-card:hover::before { transform: scaleX(1); }
-        .pillar-card:hover {
-            transform: translateY(-8px) scale(1.02); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(6, 182, 212, 0.3);
-            border-color: var(--secondary);
-        }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .pillar-card:nth-child(1) { animation-delay: 0.1s; } .pillar-card:nth-child(2) { animation-delay: 0.2s; }
-        .pillar-card:nth-child(3) { animation-delay: 0.3s; } .pillar-card:nth-child(4) { animation-delay: 0.4s; }
-        .pillar-card:nth-child(5) { animation-delay: 0.5s; } .pillar-card:nth-child(6) { animation-delay: 0.6s; }
-        .pillar-card:nth-child(7) { animation-delay: 0.7s; }
-        .pillar-icon { font-size: 3rem; margin-bottom: 1rem; display: inline-block; animation: pulse 2s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .pillar-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--accent); }
-        .pillar-tech { font-size: 1rem; color: var(--secondary); margin-bottom: 1rem; font-weight: 600; }
-        .pillar-description { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
-        .security-section {
-            background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-radius: 24px; padding: 3rem; margin-bottom: 3rem; box-shadow: var(--shadow-glow);
-        }
-        .threat-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
         .threat-card {
             background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 12px;
             padding: 1.5rem; transition: all 0.3s ease;
