@@ -1,6 +1,10 @@
-# React + TypeScript + Vite
+# React + TypeScript + Vite + QAntum SaaS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🌟 Sovereign SaaS Capabilities
+Integrated **Zero-Error Architecture** for mission-critical reliability:
+- **Resilience**: `CircuitBreaker` and `Exponential Backoff` policies.
+- **Integrity**: `Zod` schema validation for all financial data.
+- **Verification**: `MSW` mock handlers for simulation of 429/500/Latency scenarios.
 
 Currently, two official plugins are available:
 

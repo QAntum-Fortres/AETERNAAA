@@ -125,7 +125,7 @@ export * as reporter_index from './_root_migrated/reporter-index';
 export * as response_asserter from './_root_migrated/response-asserter';
 export * as RUN_AGENT_bat from './_root_migrated/RUN-AGENT-bat';
 export * as RUN_V8_bat from './_root_migrated/RUN-V8-bat';
-export * as saas_index from './_root_migrated/saas-index';
+export * as saas from '../saas';
 export * as sales_cursorrules from './_root_migrated/sales-cursorrules';
 export * as sales_index from './_root_migrated/sales-index';
 export * as scan from './_root_migrated/scan';

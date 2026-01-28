@@ -64,6 +64,24 @@ export {
 } from './subscription';
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// UTILS & SAFETY (ZERO-ERROR)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export { callWithRetry } from './utils/retry';
+export { CircuitBreaker } from './utils/circuit-breaker';
+export { 
+  InvoiceSchema, 
+  InvoiceItemSchema, 
+  WebhookEventSchema, 
+  safeParseInvoice 
+} from './validation/schemas';
+export { InMemoryIdempotencyStore, IdempotencyHandler } from './middleware/idempotency';
+export { logger, Logger } from './utils/logger';
+export { config } from './config/env';
+export { SaaSErrorBoundary } from './components/ErrorBoundary';
+export { initSentry } from './config/sentry';
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // UNIFIED SAAS FACADE
 // ═══════════════════════════════════════════════════════════════════════════════
 
