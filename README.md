@@ -139,6 +139,28 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for comprehensive deployment guide.
 ./scripts/deploy.sh
 ```
 
+### Git Operations
+
+**Push current branch to all configured remotes:**
+
+Linux/Mac:
+```bash
+./scripts/push-all-branches.sh
+```
+
+Windows:
+```powershell
+.\scripts\push-all-branches.ps1
+```
+
+This script will:
+- Show your current branch
+- Check for uncommitted changes (with option to commit)
+- Push to all configured git remotes
+- Provide a summary of successful and failed pushes
+
+For detailed usage and troubleshooting, see [PUSH_SCRIPTS_GUIDE.md](PUSH_SCRIPTS_GUIDE.md)
+
 ---
 
 ## 📡 API Endpoints
