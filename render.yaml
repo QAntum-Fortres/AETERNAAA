@@ -25,6 +25,8 @@ services:
         sync: false
       - key: EXCHANGE_SECRET_KEY
         sync: false
+      - key: GEMINI_API_KEY
+        sync: false
       - key: CORS_ORIGIN
         value: https://aeterna.website
 
@@ -50,6 +52,8 @@ services:
       - key: EXCHANGE_API_KEY
         sync: false
       - key: EXCHANGE_SECRET_KEY
+        sync: false
+      - key: GEMINI_API_KEY
         sync: false
       - key: CORS_ORIGIN
         value: https://aeterna-backend.onrender.com
