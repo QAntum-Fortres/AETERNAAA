@@ -154,6 +154,8 @@ This script will:
 - Push to all configured git remotes
 - Provide a summary of successful and failed pushes
 
+For detailed usage and troubleshooting, see [PUSH_SCRIPTS_GUIDE.md](PUSH_SCRIPTS_GUIDE.md)
+
 ---
 
 ## 📡 API Endpoints
