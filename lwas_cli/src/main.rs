@@ -124,22 +124,36 @@ async fn main() {
 
     // Start HTTP server IMMEDIATELY for healthcheck
     let server_handle = tokio::spawn(async move {
-        let listener = tokio::net::TcpListener::bind("0.0.0.0:8890")
-            .await
-            .unwrap();
-        println!("📡 [NEURAL_LINK]: API Active on Port 8890");
+        // [JULES_INTEGRATION]: Auto-detect Render PORT or default to 8890
+        let port = std::env::var("PORT").unwrap_or_else(|_| "8890".to_string());
+        let addr = format!("0.0.0.0:{}", port);
+        
+        println!("📡 [NEURAL_LINK]: Binding to Aether at {}", addr);
+        
+        let listener = tokio::net::TcpListener::bind(&addr).
+            await
+            .expect("FAILED_TO_BIND_PORT");
+            
+        println!("📡 [NEURAL_LINK]: API Active on Port {}", port);
         axum::serve(listener, app).await.unwrap();
     });
 
     // Initialize organism in background (non-blocking)
     let state_clone = shared_state.clone();
     tokio::spawn(async move {
-        let soul_path = "../AETERNA_ANIMA.soul";
+        // Look in current directory first
+        let soul_path = "AETERNA_ANIMA.soul";
         let soul_content = match fs::read_to_string(soul_path) {
             Ok(content) => content,
             Err(_) => {
-                println!("🚨 [ERROR]: AETERNA_ANIMA.soul NOT FOUND. Using default.");
-                "SOUL_ID: DEFAULT\nNAME: AETERNA".to_string()
+                // Fallback to parent if not found (dev mode)
+                match fs::read_to_string("../AETERNA_ANIMA.soul") {
+                    Ok(content) => content,
+                    Err(_) => {
+                        println!("🚨 [ERROR]: AETERNA_ANIMA.soul NOT FOUND. Using default.");
+                        "SOUL_ID: DEFAULT\nNAME: AETERNA".to_string()
+                    }
+                }
             }
         };
 
@@ -462,3 +476,57 @@ async fn handle_login(
         }),
     )
 }
+
+async fn handle_get_plans() -> Json<PlansResponse> {
+    let plans = vec![
+        PlanTier {
+            id: "starter".into(),
+            name: "Neophyte".into(),
+            price: 999,
+            currency: "EUR".into(),
+            features: vec!["Basic Access".into(), "Limited Queries".into()],
+            recommended: false,
+        },
+        PlanTier {
+            id: "pro".into(),
+            name: "Sovereign".into(),
+            price: 2999,
+            currency: "EUR".into(),
+            features: vec!["Full Access".into(), "AI Support".into(), "Usage Analytics".into()],
+            recommended: true,
+        },
+        PlanTier {
+            id: "enterprise".into(),
+            name: "Architect".into(),
+            price: 9999,
+            currency: "EUR".into(),
+            features: vec!["Dedicated Node".into(), "Custom Soul".into(), "24/7 Support".into()],
+            recommended: false,
+        }
+    ];
+
+    Json(PlansResponse {
+        success: true,
+        plans,
+    })
+}
+
+async fn handle_checkout(Json(payload): Json<CheckoutRequest>) -> Json<CheckoutResponse> {
+    println!(" [PAYMENT]: Checkout initiated for plan {} by {}", payload.plan_id, payload.email);
+    
+    // Simulate payment session creation
+    let session_id = format!("sess_{}", uuid::Uuid::new_v4());
+    
+    Json(CheckoutResponse {
+        success: true,
+        checkout_url: Some(format!("https://checkout.stripe.com/pay/{}", session_id)),
+        session_id: Some(session_id),
+        error: None,
+    })
+}
+
+async fn handle_webhook(Json(payload): Json<serde_json::Value>) -> StatusCode {
+    println!(" [WEBHOOK]: Received payment event: {:?}", payload);
+    StatusCode::OK
+}
+
