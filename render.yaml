@@ -38,8 +38,8 @@ services:
     name: aeterna-middleware
     env: docker
     plan: starter
-    dockerContext: ./OmniCore
-    dockerfilePath: ../Dockerfile.middleware
+    dockerContext: .
+    dockerfilePath: Dockerfile.middleware
     healthCheckPath: /api/status
     envVars:
       - key: NODE_ENV
