@@ -21,6 +21,7 @@ import { DepartmentEngine } from './DepartmentEngine';
 import { Telemetry } from './telemetry/Telemetry';
 import { Logger } from './telemetry/Logger';
 import { PaymentGateway } from './economy/PaymentGateway';
+import { killSwitch } from './intelligence/NeuralKillSwitch';
 import * as path from 'path';
 
 /**
@@ -71,6 +72,34 @@ export class SingularityServer {
     this.app.get('/api/status', async (req: any, res: any) => {
       const status = await this.engine.getOverallStatus();
       res.json(status);
+    });
+
+    // --- Security & Transparency (Kill Switch) ---
+    this.app.get('/api/system/security/status', (req: any, res: any) => {
+      const armed = killSwitch.isSystemArmed();
+      const integrity = killSwitch.verifyIntegrity();
+      const protectedFiles = killSwitch.getProtectedFiles().length;
+
+      let systemStatus = 'OPERATIONAL';
+      if (integrity.destroyed > 0) systemStatus = 'COMPROMISED_DESTRUCTION_EVENT';
+      else if (integrity.tampered > 0) systemStatus = 'WARNING_INTEGRITY_LOSS';
+      else if (!armed) systemStatus = 'VULNERABLE_DISARMED';
+
+      res.json({
+        systemStatus,
+        armed,
+        stats: integrity,
+        protectedFilesCount: protectedFiles,
+        timestamp: new Date().toISOString()
+      });
+    });
+
+    this.app.get('/api/system/security/incidents', (req: any, res: any) => {
+      const logs = killSwitch.getIntrusionLog();
+      res.json({
+        count: logs.length,
+        incidents: logs
+      });
     });
 
     // --- Department Management ---
