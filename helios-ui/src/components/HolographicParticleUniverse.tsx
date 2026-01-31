@@ -14,10 +14,23 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial, Line } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Configuration constants
+const UNIVERSE_CONFIG = {
+  FOG_COLOR: '#020205',
+  FOG_NEAR: 15,
+  FOG_FAR: 35,
+  AMBIENT_LIGHT_INTENSITY: 0.5,
+  CAMERA_POSITION: [0, 0, 20] as [number, number, number],
+  CAMERA_FOV: 60,
+  PRIMARY_COLOR: '#00f5ff',
+  SECONDARY_COLOR: '#9d50bb',
+  TERTIARY_COLOR: '#ff00ff',
+};
+
 // Particle Universe Core
 const ParticleField: React.FC<{ count?: number; color?: string }> = ({ 
   count = 5000, 
-  color = '#00f5ff' 
+  color = UNIVERSE_CONFIG.PRIMARY_COLOR 
 }) => {
   const ref = useRef<THREE.Points>(null);
   
@@ -245,17 +258,17 @@ export const HolographicParticleUniverse: React.FC<{
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas
-        camera={{ position: [0, 0, 20], fov: 60 }}
+        camera={{ position: UNIVERSE_CONFIG.CAMERA_POSITION, fov: UNIVERSE_CONFIG.CAMERA_FOV }}
         dpr={[1, 2]}
         style={{ background: 'transparent' }}
       >
-        <fog attach="fog" args={['#020205', 15, 35]} />
-        <ambientLight intensity={0.5} />
+        <fog attach="fog" args={[UNIVERSE_CONFIG.FOG_COLOR, UNIVERSE_CONFIG.FOG_NEAR, UNIVERSE_CONFIG.FOG_FAR]} />
+        <ambientLight intensity={UNIVERSE_CONFIG.AMBIENT_LIGHT_INTENSITY} />
         
         {/* Main particle field */}
-        <ParticleField count={particleCount} color="#00f5ff" />
-        <ParticleField count={Math.floor(particleCount * 0.3)} color="#9d50bb" />
-        <ParticleField count={Math.floor(particleCount * 0.2)} color="#ff00ff" />
+        <ParticleField count={particleCount} color={UNIVERSE_CONFIG.PRIMARY_COLOR} />
+        <ParticleField count={Math.floor(particleCount * 0.3)} color={UNIVERSE_CONFIG.SECONDARY_COLOR} />
+        <ParticleField count={Math.floor(particleCount * 0.2)} color={UNIVERSE_CONFIG.TERTIARY_COLOR} />
         
         {/* Neural connections */}
         <NeuralConnections />

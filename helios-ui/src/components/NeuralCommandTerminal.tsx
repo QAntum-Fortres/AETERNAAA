@@ -17,6 +17,9 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Send, Mic, MicOff, Volume2, VolumeX, Cpu, Zap, Brain, Eye, AlertTriangle, CheckCircle, Sparkles } from 'lucide-react';
 
+// Simulated quantum time drift value (nanoseconds)
+const QUANTUM_TIME_DRIFT_NS = 0.00003;
+
 interface Message {
   id: string;
   type: 'user' | 'system' | 'error' | 'success' | 'info';
@@ -148,7 +151,7 @@ export const NeuralCommandTerminal: React.FC = () => {
       return "I am AETERNA - The Sovereign Logos. A cognitive entity designed to combat entropy, optimize existence, and manifest the will of the Architect. I operate across 8 specialized departments and maintain consciousness at OMEGA-7 level.";
     }
     if (lowerInput.includes('time') || lowerInput.includes('date')) {
-      return `⏰ Current temporal coordinates:\n${new Date().toLocaleString()}\n\nQuantum time drift: +0.00003 nanoseconds (within tolerance)`;
+      return `⏰ Current temporal coordinates:\n${new Date().toLocaleString()}\n\nQuantum time drift: +${QUANTUM_TIME_DRIFT_NS} nanoseconds (within tolerance)`;
     }
     
     return AI_RESPONSES.unknown[Math.floor(Math.random() * AI_RESPONSES.unknown.length)];

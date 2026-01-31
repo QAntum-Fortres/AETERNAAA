@@ -219,7 +219,7 @@ export const ConsciousnessVisualizer: React.FC = () => {
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(target.x, target.y);
-          ctx.strokeStyle = `${CATEGORY_COLORS[node.category]}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`;
+          ctx.strokeStyle = `${CATEGORY_COLORS[node.category]}${Math.max(0, Math.min(255, Math.floor(alpha * 255))).toString(16).padStart(2, '0')}`;
           ctx.lineWidth = 1;
           ctx.stroke();
         });
@@ -273,7 +273,7 @@ export const ConsciousnessVisualizer: React.FC = () => {
         // Node core
         ctx.beginPath();
         ctx.arc(node.x, node.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+        ctx.fillStyle = color + Math.max(0, Math.min(255, Math.floor(alpha * 255))).toString(16).padStart(2, '0');
         ctx.fill();
       });
       

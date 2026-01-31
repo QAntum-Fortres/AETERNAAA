@@ -158,9 +158,10 @@ export const QuantumConsciousnessAwakening: React.FC<{
         const size = 2 + pulse * 3;
         const alpha = 0.3 + pulse * 0.7;
         
-        // Glow effect
+        // Glow effect - ensure alpha is within valid range
+        const alphaHex = Math.max(0, Math.min(255, Math.floor(alpha * 80))).toString(16).padStart(2, '0');
         const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size * 3);
-        gradient.addColorStop(0, `${currentPhase.color}${Math.floor(alpha * 80).toString(16).padStart(2, '0')}`);
+        gradient.addColorStop(0, `${currentPhase.color}${alphaHex}`);
         gradient.addColorStop(1, 'transparent');
         
         ctx.beginPath();

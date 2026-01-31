@@ -200,6 +200,7 @@ export const QuantumTelemetryDashboard: React.FC = () => {
   ]);
 
   const [alerts, setAlerts] = useState<string[]>([]);
+  const [currentTime, setCurrentTime] = useState(() => new Date().toLocaleString());
 
   // Update metrics periodically
   useEffect(() => {
@@ -225,6 +226,9 @@ export const QuantumTelemetryDashboard: React.FC = () => {
           load: Math.max(10, Math.min(95, dept.load + (Math.random() - 0.5) * 10)),
         }))
       );
+
+      // Update time
+      setCurrentTime(new Date().toLocaleString());
     }, 1000);
 
     return () => clearInterval(interval);
@@ -239,7 +243,7 @@ export const QuantumTelemetryDashboard: React.FC = () => {
             Quantum Telemetry
           </h1>
           <p className="text-gray-500 text-sm font-mono">
-            AETERNA SYSTEM MONITORING • {new Date().toLocaleString()}
+            AETERNA SYSTEM MONITORING • {currentTime}
           </p>
         </div>
         
